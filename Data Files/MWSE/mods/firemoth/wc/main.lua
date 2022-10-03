@@ -1,5 +1,5 @@
-local questVariables = require("gross_2022.vars")
-local utils = require("gross_2022.utils")
+local questVariables = require("firemoth.vars")
+local utils = require("firemoth.utils")
 
 --- @param e simulateEventData
 local function simulateCallback(e)
