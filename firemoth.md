@@ -11,6 +11,7 @@
         * [Hjrondir](#hjrondir)
         * [Mara](#mara)
         * [JHanir](#jhanir)
+        * [Lexion Pontius](#lexion-pontius)
     * [Quest](#quest)
 3. [Visuals](#visuals)
     * [Fort Exterior](#fort-exterior)
@@ -108,6 +109,10 @@ An imperial lower ranking member of the Imperial Legion sent to help reclaim For
 > *Thank you for finding me! The mushrooms have kept me alive for some time now. Lead the way, and I'll help anyway I can.*
 
 Argonion archer. Sole living survivor of the original fort staff. Survived by hiding in the mines and living off mushrooms.
+
+#### Lexion Pontius
+
+A member of the EEC tasked with the rebuild and management of Fort Firemoth along with the player. Can be found inside the rebuilt Fort. Acts as a host for the Fort Management gameplay section.
 
 ## Quest
 
@@ -236,5 +241,9 @@ Potential ideas
 Further details need to be filled in.
 
 ### Fort Management
+
+* Upon completing the quest the player can talk to Lexion Pontius to manage the fort.
+* Allow upgrading/changing various sets of furnite/banners etc. 
+* Manage Miners and Mercenaries used to extract/protect and ship the ebony.
 
 Further details need to be filled in.
