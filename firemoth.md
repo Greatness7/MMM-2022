@@ -109,8 +109,8 @@ The overall color palette for the environments of this mod will be grey/green, w
 
 ### Island
 
-Approaching Fort Firemoth, the sky should take on a dark tone with a slight green tint
-Shaders will be used to change the sky and water colors (if possible).
+- [ ] Approaching Fort Firemoth, the sky should take on a dark tone with a slight green tint
+- [x] Shaders will be used to change the sky and water colors (if possible).
 
 Further details need to be filled in.
 
