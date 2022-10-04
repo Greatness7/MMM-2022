@@ -71,9 +71,10 @@ A member of the EEC tasked with the rebuild and management of Fort Firemoth alon
 ## Quest
 
 The quest can be started by reading a report in Sellus Gravius office regarding Fort Firemoth.
-Afterwards, the player can ask Sellus Gravius about Fort Firemoth, as long as he has reached Champion rank (4) within the imperial legion.
+Afterwards, the player can ask Sellus Gravius about Fort Firemoth, as long as he has reached Champion rank (4) within the imperial legion and has over 10 reputation (They won't give this quest to a random newcomer who hasn't proved himself)
 He will refuse to disclose details and start the quest otherwise.
-Talking to him about Fort Firemoth reveals that it has been overrun by the undead and a specialist team consisting of Aronil, Hyrondir and Mara Varius has been formed to purge the undead threat from the island.
+Talking to him about Fort Firemoth reveals that it has been overrun by the undead and a specialist team composed of Aronil, Hyrondir and Varius has been formed to purge the undead threat from the island. There are also a dozen more imperial guards sent there (They won't be followers and will be there only to help clearing few first waves of mobs before dying -> Give them very few HP and low level equipment)
+
 Sellus Gravius was supposed to lead the charge, but will request your aid instead.
 
 After teaming up with the rest of the party the player takes a boat to head to the island, where they will proceed to retake the island before heading into the ebony mines of the fort.
