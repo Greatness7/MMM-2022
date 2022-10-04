@@ -27,7 +27,7 @@ local weatherFlip = false
 local function updateColours(k)
     local weathCon = tes3.worldController.weatherController
     for _, name in pairs(properties) do
-        local newCol = localWeather[name]:lerp(questVariables.skyControl.weatherData.airColour, utils.bellCurve(k, 1, 0, 1024))
+        local newCol = localWeather[name]:lerp(questVariables.skyControl.weatherData.airColour, utils.bellCurve(k, 1, 0, questVariables.skyControl.triggerDistance))
         weathCon.currentWeather[name].r = newCol.r
         weathCon.currentWeather[name].g = newCol.g
         weathCon.currentWeather[name].b = newCol.b
@@ -41,8 +41,9 @@ local function simulateCallback(e)
     if (localWeather) then
         -- Confirm toggle condition and outside...
         if (tes3.getJournalIndex { id = questVariables.skyControl.journalOn.condition } == questVariables.skyControl.journalOn.value and tes3.getPlayerCell().isInterior == false) then
-            local dist = tes3.player.position:distance(tes3.getReference(questVariables.skyControl.targetObject).position)
+            local dist = tes3.player.position:distance(questVariables.skyControl.targetPosition)
             updateColours(dist)
+            debug.log(dist)
             if (weatherFlip == false) then
                 weatherFlip = true
             end
