@@ -1,81 +1,149 @@
 # Project Firemoth
 
-## Index
+1. [Introduction](#introduction)
+    * [Overview](#overview)
+2. [Story](#story)
+    * [Characters](#characters)
+        * [Grurn](#grurn)
+        * [Sellus Gravius](#sellus-gravius)
+        * [Silm-Dar](#silm-dar)
+        * [Aronil](#aronil)
+        * [Hjrondir](#hjrondir)
+        * [Mara](#mara)
+        * [JHanir](#jhanir)
+    * [Quest](#quest)
+3. [Visuals](#visuals)
+    * [Fort Exterior](#fort-exterior)
+    * [Fort Upper Levels](#fort-upper-levels)
+    * [Fort Lower Levels](#fort-lower-levels)
+    * [Ebony Mine](#ebony-mine)
+    * [Velothi Tomb](#velothi-tomb)
+4. [Gameplay](#gameplay)
+    * [Enemies](#enemies)
+        * [Grurn](#grurn)
+        * [Skeleton Variants](#skeleton-variants)
+        * [Rat Infestation](#rat-infestation)
+	* [Hazards](#hazards)
+    * [Fort Management](#fort-management)
 
-1. Introduction
-    * Members
-    * Overview
-    * Dependencies
-2. Story
-    * Characters
-    * Quest
-3. Visuals
-    * Island
-	* Fort
-    * Ebony Mine
-    * Velothi Tomb
-4. Gameplay
-    * Enemies
-	* Hazards
-	* The Curse of Rot
-    * Fort Management
-
-## 1 - Introduction
-
-### Members
-
-* Greatness7 - Assets, Exterior Design
-* Remiros - Assets, Interior Design, Writing/Quest Design(?)
-* Ohayo - Writing, Scripting(?)
-* Sephumbra - Scripting (Gameplay), Writing/Quest Design(?)
-* Safebox - Scripting (Visuals), Shaders
+## Introduction
 
 ### Overview
 
-The scope of the mod will be an overhaul of the Firemoth DLC originally developed by Bethesda. This encompasses a complete recreation of all associated content.
-It is split into 4 distinct areas: The island, the fort, the ebony mine and the velothi tomb/dungeon. More details on each section will be provided throughout this document.
-The fort will be rebuilt at the end of the quest and be placed under the players care, offering up new gameplay mechanics for the player to engage with.
+> *The island fortress of Firemoth was taken by the skeleton army of Grurn years ago. It's time to take it back. Sellus Gravius, Captain of the Seyda Neen Census and Excise Office, hires you to lead a band of adventurers to the Fort.*
 
-### Dependencies
+The mod is an overhaul and expansion of the [Siege at Firemoth](https://en.uesp.net/wiki/Morrowind:Siege_at_Firemoth) plugin.
 
-The project will use MGE XE, MWSE Lua scripting, as well as assets found in OAAB and TD. Users are required to have these installed in order for the mod to work.
+It will consist of mainly two stages:
 
-## 2 - Story
+1. An initial dungeon crawl, where the player is tasked with reclaiming the fort from the empire's enemies.
+2. A series of follow-up quests and activities that allow the player to assist in restoring the ruined fort.
+
+## Story
 
 ### Characters
 
 #### Grurn
 
-The antagonist and main threat. A powerful mage, specialized in necromancy and illusion magic. Was buried in a velothi tomb, which was uncovered during digging operations in the ebony mine of the fort. Has now taken over the entire fort and mine with an army of undead. The velothi tomb is his main base of operations.
+The leader of the undead horde that has overrun Fort Firemoth. Grurn is an ancient lich necromancer. He carries the *Ward of Akavir* artifact and specializes in lightning magic. 
+
+In his life he was the [Imperial Battlemage](https://en.uesp.net/wiki/Lore:Imperial_Battlemages#Imperial_Battlemage_of_Tamriel) for [Uriel Septim V](https://en.uesp.net/wiki/Lore:Uriel_Septim_V). He accompanied the emperor on the failed [invasion of Akavir in 3E 290](https://en.uesp.net/wiki/Lore:Report:_Disaster_at_Ionith), acquiring the *Ward of Akavir* artifact in the process. 
+
+After the death of Uriel V in Akavir the imperial armies fled by boat back to Tamriel. During the return trip Grurn became their scapegoat and was eventually betrayed and thrown overboard into the sea. Through unknown means Grurn managed to preserve his body by completing the transformation into a lich. The ordeal left his magic spent and he entered a long slumber to recover. 
+
+Approximately a hundred years later, Grurn awoke and began his long sea walk back to Tamriel. His magics replenished and enhanced by lichdom, he is more formidable than ever. A perpetual lightning storm fills the skies above him. He raises a skeleton horde as a goes; animating the remains of what was once the imperial navy. 
+
+Driven by revenge he makes his way to Fort Firemoth, where the imperials had kept the *Ward of Akavir* artifact, unaware of it's history. The undead horde walk out of the sea and overrun the fort. He reclaims the *Ward of Akavir* and makes the fort into his citadel. Further attempts by the empire to reclaim the fort have repeatedly met with failure.
 
 #### Sellus Gravius
 
-A vanilla NPC. Will act as a gatekeeper to the mod and its quest content. Quest reward will also be given by this NPC.
+> *This Imperial fort offshore to the west was captured years ago by the undead horde of Grurn, who literally marched out of the ocean and overran the garrison there. The survivors were forced to leave behind the Ward of Akavir, and I'm looking for someone to lead a group to retrieve it. Are you up for it?*
+
+Imperial Legion officer who is recruiting a band of adventurers to reclaim Fort Firemoth.
+
+#### Silm-Dar
+
+> *Are you ready to sail to Firemoth Fort?*
+
+Argonian Sailor. Provides travel to/from the Firemoth island and Seyda Neen.
 
 #### Aronil
 
-An Altmer mercenary hired by the Imperial Legion to help reclaim Fort Firemoth. A very powerful mage from the Summerset Isles. Wears a robe and some magic scrolls/items and a unique enchanted staff. Specialized in destruction and illusion magic. Will later die when attempting to open the seal (with a special scroll he carries with him) protecting the velothi tomb that Grurn resides in, if not previously killed.
+> *I'll follow you. I hope you know what you're doing.*
+
+Altmer battlemage who joins you on the expedition. High level, doubts your competency.
+
+<details>
+(Put any character ideas/details in here.)
+
+A very powerful mage from the Summerset Isles. Wears a robe and some magic scrolls/items and a unique enchanted staff. Specialized in destruction and illusion magic. Will later die when attempting to open the seal (with a special scroll he carries with him) protecting the velothi tomb that Grurn resides in, if not previously killed.
+</details>
 
 #### Hjrondir
 
-A Nord mercenary hired by the Imperial Legion to help reclaim Fort Firemoth. A very powerful fighter wielding a unique silver war axe and regular steel armor with bracers. Will go insane and attack the player during the expedition into the velothi tomb, if not previously killed.
+> *Lead the way! We're here to kill!*
 
-#### Mara Varius
+A nord warrior who joins you on the expedition. Loyal, battle hungry.
+
+<details>
+(Put any character ideas/details in here.)
+
+A Nord mercenary hired by the Imperial Legion to help reclaim Fort Firemoth. A very powerful fighter wielding a unique silver war axe and regular steel armor with bracers. Will go insane and attack the player during the expedition into the velothi tomb, if not previously killed.
+</details>
+
+#### Mara
+
+> *I've seen worse. Lead On.*
+
+Bosmer archer who joins you on the expedition. Cocky, bored?
+
+<details>
+(Put any character ideas/details in here.)
 
 An imperial lower ranking member of the Imperial Legion sent to help reclaim Fort Firemoth. As a former Imperial Cult priestess she is specialized in healing and holy (Turn Undead) magic. Wears regular heavy imperial legion armor with a shield and mace. Can become a companion/underling if she survives the entire quest chain and you return to Sellus Gravius.
+</details>
 
-#### Lexion Pontius
+#### JHanir
 
-A member of the EEC tasked with the rebuild and management of Fort Firemoth along with the player. Can be found inside the rebuilt Fort. Acts as a host for the Fort Management gameplay section.
+> *Thank you for finding me! The mushrooms have kept me alive for some time now. Lead the way, and I'll help anyway I can.*
+
+Argonion archer. Sole living survivor of the original fort staff. Survived by hiding in the mines and living off mushrooms.
 
 ## Quest
 
-The quest can be started by reading a report in Sellus Gravius office regarding Fort Firemoth.
-Afterwards, the player can ask Sellus Gravius about Fort Firemoth, as long as he has reached Champion rank (4) within the imperial legion and has over 10 reputation (They won't give this quest to a random newcomer who hasn't proved himself)
-He will refuse to disclose details and start the quest otherwise.
-Talking to him about Fort Firemoth reveals that it has been overrun by the undead and a specialist team composed of Aronil, Hyrondir and Varius has been formed to purge the undead threat from the island. There are also a dozen more imperial guards sent there (They won't be followers and will be there only to help clearing few first waves of mobs before dying -> Give them very few HP and low level equipment)
+Below is a rough bare-bones outline of the quest stages, and random related ideas/thoughts.
 
-Sellus Gravius was supposed to lead the charge, but will request your aid instead.
+* If the player is of sufficient rank/reputation they will hear rumors of Sellus Gravius recruiting adventurers.
+    * Requires rank Champion (4) and 10 reputation? (They won't give this quest to a random newcomer who hasn't proved himself)
+* The player speaks with Sellus Gravius, learns about Fort Firemoth, and agrees to join the expedition.
+    * Doesn't need to be a huge lore dump. We can learn the backstory details from spirits or quests in the second stage.
+* The player meets up with the other members of the expedition (Aronil, Hjrondir, Mara) at the docks and they all take the boat to Firemoth Island.
+    * We could insert some more backstory for these guys if anyone is interested. Perhaps the player himself recruits them?
+* The band arrives at Firemoth island and make their way to the keep.
+    * The island (and interior) is enhanced with custom visuals, assets, and ambient music/sounds.
+    * Most likely will include a few cinematic combat sequences. Skeletons rising from the ground/etc.
+    * Managing companion AI sucks so we should come up with good reasons for the group to split up.
+    * Possibly some kind of curse mechanic is engaged upon stepping onto the land.
+    * Lightning strikes that do damage to living and reanimate undead.
+    * Collect as many ideas as we can and implement the best ones!
+* The player makes his way through the fort dungeon and its lower levels.
+    * Mixture of 3 tilesets (Imperial, Cavern, and Velothi).
+    * Loads of room for fun puzzles and encounters. 
+    * Illusionary infinite hallways, nonsensical geometry, whatever.
+    * Collect as many ideas as we can and implement the best ones!
+* In the lowest depths the player encounters Grurn and defeats him.
+    * Maybe cinematic boss battle, or maybe somethign more exploation related. Many options.
+* The player returns to Sellus Gravius with the Ward of Akavir as proof of success.
+    * Unlike the vanilla implementation, player gets to keep the artifact.
+* New quest line opens up to begin the process of rebuilding Fort Firemoth.
+    * Assets will be periodically swapped with repaired versions.
+    * New staff can be recruited to populate the fort. Potentially some freed slaves.
+    * Re-establish connections with the EEC to handle ebony trade.
+    * Rebuild the docks to allow new fast travel locations.
+    * Collect as many ideas as we can and implement the best ones!
+
+<details>
+(Text from Sephumbra's previous edit)
 
 After teaming up with the rest of the party the player takes a boat to head to the island, where they will proceed to retake the island before heading into the ebony mines of the fort.
 Upon reaching the entrance of the velothi tomb at the end of the mines Aronil will attempt to unlock the seal protecting the entrance with a special scroll he has prepared beforehand.
@@ -103,75 +171,70 @@ If the player has the rank of Knight Protector (7) within the legion Sellus Grav
 Rebuilding the fort to its basic form will only consist of being informed that they cooperated with the EEC to shore up reconstruction costs and waiting a week (?).
 Once rebuilt the quest can be completed by talking to Sellus Gravius once more, referring you to Lexion Pontius inside the rebuilt Fort. The legion can't expend any more forces to protect the Fort so its up to the player to hire Mercenaries to do this.
 The player is now free to manage the fort and the ebony mine with the help of the EEC on the island as stated under the corresponding gameplay section.
+</details>
 
-## 3 - Visuals
-
-The overall color palette for the environments of this mod will be grey/green, with some exceptions stated further below.
+## Visuals
 
 ### Island
 
-- [ ] Approaching Fort Firemoth, the sky should take on a dark tone with a slight green tint
-- [x] Shaders will be used to change the sky and water colors (if possible).
+* There is a persistent storm due to Grurns presence.
+* Subtle cursed shader effects as long as Grurn remains.
+* The sky and color pallettes should take on a green shift.
 
 Further details need to be filled in.
 
-### Fort
+### Fort Exterior
 
-The fort will be expanded to include a large dock for shipping and housing for workers and mercenaries.
+Further details need to be filled in.
+
+### Fort Upper Levels
+
+Further details need to be filled in.
+
+### Fort Lower Levels
 
 Further details need to be filled in.
 
 ### Ebony Mine
 
-Will contain a large industrial imperial ebony mine with corpses of former miners and parties that failed to break through to the tomb.
-Pools of lava may also be found, perhaps a heatwave shader could be used here?
-
 Further details need to be filled in.
 
 ### Velothi Tomb
 
-The player may find themselves in various situation throughout the dungeon where trickery or illusion magic is at work.
-During those a screen-space shader (perhaps a slight distortion effect) should be used to indicate that things might not be right.
+* A branch of the nearby Sarys Ancestral Tomb.
+* Probably unearthed by Grurn to use as an additional resource of corpses.
+* (Idea) Some parts of the imperial set have collapsed and fallen into the velothi tombs halls. Fun and unusual tileset mixing.
+* (Idea) Utilize velothi spirits against the lich?
 
 Further details need to be filled in.
 
-## 4 - Gameplay
+## Gameplay
 
 ### Enemies
 
 #### Grurn
 
-Grurn is the main boss at the deepest part of the velothi dungeon.
-Has a large selection of illusion and destruction spells, as well as summoning spells.
-Will be invincible unless the player finds the phylactery hidden within the room.
-Has a artifact level staff equipped.
+Specializes in lightning and necromancy.
 
-#### Shade of Grurn
+#### Skeleton Variants
 
-Occasionally, a Shade of Grurn will spawn when the player is affected by the curse.
-This will be done at random through scripting, with larger periods between them.
-These shades will roughly resembly a much weaker version of Grurn with a limited set of magic.
+Further details need to be filled in.
 
-Further enemies need to be filled in.
+#### Rat Infestation
 
-### The Curse of Rot
-
-The player will suffer from a permanent curse (ability) when opening the seal on the door to the velothi tomb.
-The curse lowers the players attributes and has a permanent 1 point per second magicka/fatigue damage (Done through lua to avoid visual magic effects).
-While affected by the curse Shades of Grurn can spawn at any time around the player.
-The player will sometimes see shades of random NPCs throughout the world that they cant interact with and that will not do anything.
-The players equipped weapons and armor will very slowly degrade over time.
-The players vision will rarely get a bit blurry for a short period of time, while also hearing whispering (To indicate insanity).
+Further details need to be filled in.
 
 ### Hazards
 
-Throughout the velothi tomb various hazards will be introduced, including endless skeleton spawners (which can be disabled), corridors, a player clone fight, gas chambers, illusionary chambers where the player needs to kill their companions and more.
+Potential ideas
+    * Endless skeleton spawners
+    * Infinite corridor puzzles
+    * A player clone fight
+    * Gas chambers
+    * Chambers where the player needs to kill their companions.
 
 Further details need to be filled in.
 
 ### Fort Management
 
-Upon completing the quest the player can talk to Lexion Pontius to manage the fort.
-This includes upgrading/changing various sets of furnite/banners etc. throughout the fort, as well as managing Miners and Mercenaries used to extract/protect and ship the ebony.
-
-Further details coming soon.
+Further details need to be filled in.
