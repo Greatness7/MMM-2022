@@ -231,12 +231,12 @@ Further details need to be filled in.
 
 ### Hazards
 
-Potential ideas
-    * Endless skeleton spawners
-    * Infinite corridor puzzles
-    * A player clone fight
-    * Gas chambers
-    * Chambers where the player needs to kill their companions.
+Potential ideas:
+* Endless skeleton spawners
+* Infinite corridor puzzles
+* A player clone fight
+* Gas chambers
+* Chambers where the player needs to kill their companions.
 
 Further details need to be filled in.
 
