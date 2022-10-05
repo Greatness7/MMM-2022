@@ -1,0 +1,32 @@
+{
+    "[lua]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.defaultFormatter":"sumneko.lua"
+    },
+    // https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
+    "Lua.format.defaultConfig": {
+        // [basic]
+        "indent_style": "space",
+        "indent_size": "4",
+        "quote_style": "double",
+        "max_line_length": "120",
+        "insert_final_newline": "false",
+        // [function]
+        "align_function_define_params": "false",
+        "call_arg_parentheses": "keep",
+        // [table]
+        "table_separator_styl": "comma",
+        "trailing_table_separator": "smart",
+        // [row_layout]
+        "keep_line_after_if_statement": "maxLine:2",
+        "keep_line_after_do_statement": "maxLine:2",
+        "keep_line_after_while_statement": "maxLine:2",
+        "keep_line_after_repeat_statement": "maxLine:2",
+        "keep_line_after_for_statement": "maxLine:2",
+        "keep_line_after_function_define_statement": "maxLine:2",
+    }
+}
