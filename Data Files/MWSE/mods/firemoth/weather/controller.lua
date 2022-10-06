@@ -51,7 +51,7 @@ local function getCachedWeatherColors()
     if not cache[weather.index] then
         local colors = {}
         for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
-            colors[prop] = weather[prop]
+            colors[prop] = weather[prop]:copy()
         end
         cache[weather.index] = colors
     end
