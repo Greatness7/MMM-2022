@@ -10,7 +10,7 @@ local TRIGGER_DISTANCE = 5 * 8192
 
 --- The final color that we transition toward.
 --- We interpolate from the weathers base color to this color, based on distance.
-local FIREMOTH_COLOR = tes3vector3.new(0.0, 1.0, 0.0) --- TODO: pick nicer value
+local FIREMOTH_COLOR = tes3vector3.new(0.07, 0.32, 0.35)
 
 --- The color properties that will be modified.
 local MODIFIED_COLOR_PROPS = {
@@ -76,6 +76,8 @@ end
 local function interpWeatherColors(weather, colors, scalar)
     for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
         local color = colors[prop]:lerp(FIREMOTH_COLOR, scalar)
+        debug.log(prop)
+        debug.log(json.encode(color))
         weather[prop].r = color.r
         weather[prop].g = color.g
         weather[prop].b = color.b
