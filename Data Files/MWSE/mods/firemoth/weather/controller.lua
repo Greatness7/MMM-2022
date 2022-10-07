@@ -76,8 +76,6 @@ end
 local function interpWeatherColors(weather, colors, scalar)
     for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
         local color = colors[prop]:lerp(FIREMOTH_COLOR, scalar)
-        debug.log(prop)
-        debug.log(json.encode(color))
         weather[prop].r = color.r
         weather[prop].g = color.g
         weather[prop].b = color.b
