@@ -5,16 +5,16 @@ local XY = tes3vector3.new(1, 1, 0)
 local FIREMOTH_REGION_ORIGIN = tes3vector3.new(-57344, -77824, 0)
 
 local INTERIORS = {
-    ["firemoth, keep"] = true,
-    ["firemoth, great hall"] = true,
-    ["firemoth, upper chambers"] = true,
-    ["firemoth, guard quarters"] = true,
-    ["firemoth, dungeon"] = true,
-    ["firemoth, lower cavern"] = true,
-    ["firemoth, tomb"] = true,
-    ["firemoth, guard towers"] = true,
-    ["firemoth, upper cavern"] = true,
-    ["firemoth, mine"] = true,
+    ["Firemoth, Keep"] = true,
+    ["Firemoth, Great Hall"] = true,
+    ["Firemoth, Upper Chambers"] = true,
+    ["Firemoth, Guard Quarters"] = true,
+    ["Firemoth, Dungeon"] = true,
+    ["Firemoth, Lower Cavern"] = true,
+    ["Firemoth, Tomb"] = true,
+    ["Firemoth, Guard Towers"] = true,
+    ["Firemoth, Upper Cavern"] = true,
+    ["Firemoth, Mine"] = true,
 }
 
 --- @param cell tes3cell
