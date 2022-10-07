@@ -1,7 +1,7 @@
 --- @type tes3reference[]
 local referencesToCheck = {}
 
-local wall = tes3.getReference("sb_test_wall")
+local wall = tes3.getReference("sb_secretWall")
 
 local function checkLighting()
     local lightFound = false
@@ -17,6 +17,8 @@ local function checkLighting()
     if (lightFound == false) then
         wall:setNoCollisionFlag(true, true)
     end
+    debug.log(wall)
+    debug.log(wall.hasNoCollision)
 end
 
 event.register(tes3.event.equipped, function(e)
