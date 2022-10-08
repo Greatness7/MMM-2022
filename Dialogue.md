@@ -34,7 +34,7 @@ Aronil:
         At Firemoth, under 50% HP:
             "How many are there? This is insane, I shouldn't have signed up for this!"
         At Firemoth, under 25% HP:
-            "We should take a rest. The fort won't disappear over night."
+            "We should take a rest. The fort won't disappear overnight."
 
 
 Hyrondir:
@@ -49,7 +49,7 @@ Hyrondir:
         At Firemoth, under 50% HP:
             "No time to talk, there are more of them! They shall all fall under my axe!"
         At Firemoth, under 25% HP:
-            "I might not survive this, but I will at least take some of them with me, I swear it by the gods!"
+            "I might not survive this, but I will at least take some of them with me, I swear it by Ysmir!"
 
 Varius:
     Greetings:
