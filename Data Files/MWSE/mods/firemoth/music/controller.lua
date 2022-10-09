@@ -15,7 +15,7 @@ event.register("loaded", function()
 	-- Check if the music file exists
 	-- I'd also just populate the whitelistedTracks table with lfs from the folder on init
 	for _, track in ipairs(whitelistedTracks) do
-		assert(lfs.directoryexists(string.format("%s%s", MUSICDIR, track), string.format("Missing music file: %s", track))
+		assert(lfs.directoryexists(MUSICDIR..track), "Missing music file: "..track)
 	end
 end)
 
