@@ -1,4 +1,5 @@
 local utils = require("firemoth.utils")
+local MUSICDIR = "Data Files\\Music\\"
 
 --- @type function
 local isFiremothCell = utils.cells.isFiremothCell
@@ -11,10 +12,11 @@ event.register("loaded", function()
     waterLayer.sound = assert(tes3.getSound("Water Layer"))
     waterLayer.prevVolume = waterLayer.sound.volume
 
-    --- am unsure how to assert music file exists
-    -- for _, track in ipairs(whitelistedTracks) do
-    --     assert(exists)
-    -- end
+	-- Check if the music file exists
+	-- I'd also just populate the whitelistedTracks table with lfs from the folder on init
+	for _, track in ipairs(whitelistedTracks) do
+		assert(lfs.directoryexists(string.format("%s%s", MUSICDIR, track), string.format("Missing music file: %s", track))
+	end
 end)
 
 --- @param e musicSelectTrackEventData
