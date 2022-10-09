@@ -8,7 +8,7 @@ local function checkLighting()
     for _, ref in ipairs(referencesToCheck) do
         --- @type tes3light
         local light = tes3.getEquippedItem { actor = ref, objectType = tes3.objectType.light }.object
-        if ((ref.position + tes3vector3.new(0, 0, 128)):distance(wall.position) <= light.radius) then
+        if ((ref.position + tes3vector3.new(0, 0, 128)):distance(wall.position) <= light.radius * 1.5) then
             wall:setNoCollisionFlag(false, true)
             lightFound = true
             break
@@ -17,8 +17,6 @@ local function checkLighting()
     if (lightFound == false) then
         wall:setNoCollisionFlag(true, true)
     end
-    debug.log(wall)
-    debug.log(wall.hasNoCollision)
 end
 
 event.register(tes3.event.equipped, function(e)
