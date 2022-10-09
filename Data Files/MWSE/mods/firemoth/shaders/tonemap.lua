@@ -51,6 +51,6 @@ event.register(tes3.event.loaded, function()
         iterations = -1,
         duration = 1 / 10,
         callback = update,
-        data = { prevDist = math.fhuge },
+        data = { prevDist = 0 },
     })
 end)
