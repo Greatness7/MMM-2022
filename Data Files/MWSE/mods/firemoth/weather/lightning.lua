@@ -6,7 +6,7 @@ local VFX_EXPLODE_DURATION = 0.20
 local VFX_EXPLODE_LIGHT = assert(tes3.getObject("fm_lightn_expl_lit"))
 
 local VFX_STRIKE = assert(tes3.getObject("fm_lightn_strike_vfx"))
-local VFX_STRIKE_DURATION = 0.18
+local VFX_STRIKE_DURATION = 0.15
 
 local VFX_SWITCH_CHILDREN = 4
 
