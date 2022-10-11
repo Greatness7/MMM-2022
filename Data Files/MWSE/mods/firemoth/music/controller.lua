@@ -1,7 +1,7 @@
 local utils = require("firemoth.utils")
 local MUSICDIR = "Data Files\\Music\\fm\\"
 local SILENCE = "fm\\Special\\silence.mp3"
-local registered
+local previousCell
 
 --- @type function
 local isFiremothCell = utils.cells.isFiremothCell
@@ -17,36 +17,36 @@ end)
 
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
-    if (e.situation == tes3.musicSituation.explore and not table.find(whitelistedTracks, e.music)) then
+    local cell = tes3.getPlayerCell()
+    if (isFiremothCell(cell) and e.situation == tes3.musicSituation.explore and not table.find(whitelistedTracks, e.music)) then
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
         return false
     end
 end
 
-local function firemothConditionCheck(e)
-    local cell = e.cell or tes3.getPlayerCell()
+local function onCombatStopped()
+    if tes3.player.mobile.inCombat then return end -- Because MW can be really dumb with that one
+    local cell = tes3.getPlayerCell()
     local isFiremoth = isFiremothCell(cell)
-    local wasFiremoth = e.previousCell and isFiremothCell(e.previousCell)
+    if isFiremoth then
+        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
+    end
+end
+
+--- @param e cellChangedEventData
+local function firemothConditionCheck(e)
+    local cell = tes3.getPlayerCell()
+    local isFiremoth = isFiremothCell(cell)
+    local wasFiremoth = previousCell and isFiremothCell(previousCell)
 
     if isFiremoth and not wasFiremoth then
         waterLayer.sound.volume = 0
-        if not registered then
-            event.register(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
-            event.register(tes3.event.combatStopped, firemothConditionCheck, { priority = 360 })
-            registered = true
-        end
-
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
     elseif wasFiremoth and not isFiremoth then
         waterLayer.sound.volume = waterLayer.prevVolume
-        if registered then
-            event.unregister(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
-            event.unregister(tes3.event.combatStopped, firemothConditionCheck, { priority = 360 })
-            registered = false
-        end
-
         tes3.streamMusic{path = SILENCE, situation = tes3.musicSituation.explore}
     end
+    previousCell = cell
 end
 
 local function populateTracks()
@@ -59,4 +59,6 @@ local function populateTracks()
 end
 
 populateTracks()
-event.register("cellChanged", firemothConditionCheck)
+event.register(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
+event.register(tes3.event.cellChanged, firemothConditionCheck)
+event.register(tes3.event.combatStopped, onCombatStopped, { priority = 360 })
