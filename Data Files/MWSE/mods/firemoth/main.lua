@@ -10,6 +10,7 @@ event.register("initialized", function()
         dofile("firemoth.music.controller")
         dofile("firemoth.puzzles.infiniteCorners")
         dofile("firemoth.puzzles.alternatingStairs")
-        dofile("firemoth.puzzles.secretWall")
+        -- dofile("firemoth.puzzles.secretWall")
+        dofile("firemoth.testing")
     end
 end)
