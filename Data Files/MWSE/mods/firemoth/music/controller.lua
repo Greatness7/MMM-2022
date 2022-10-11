@@ -58,7 +58,12 @@ local function populateTracks()
     assert(whitelistedTracks, "Missing music files!")
 end
 
+local function resetOnLoad()
+    previousCell = nil
+end
+
 populateTracks()
 event.register(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
 event.register(tes3.event.cellChanged, firemothConditionCheck)
-event.register(tes3.event.combatStopped, onCombatStopped, { priority = 360 })
+event.register(tes3.event.combatStopped, onCombatStopped)
+event.register(tes3.event.load, resetOnLoad)
