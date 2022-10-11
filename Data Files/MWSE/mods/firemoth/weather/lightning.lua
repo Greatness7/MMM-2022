@@ -1,18 +1,22 @@
 local this = {}
 
+--- @type tes3static
+--- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_EXPLODE = assert(tes3.getObject("fm_lightn_expl_vfx"))
 local VFX_EXPLODE_DURATION = 0.20
 
+--- @type tes3light
+--- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_EXPLODE_LIGHT = assert(tes3.getObject("fm_lightn_expl_lit"))
+local VFX_CHILDREN_COUNT = 4
 
+--- @type tes3static
+--- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_STRIKE = assert(tes3.getObject("fm_lightn_strike_vfx"))
 local VFX_STRIKE_DURATION = 0.15
 
-local VFX_SWITCH_CHILDREN = 4
-
-local SIMULATION_TIME = require("ffi").cast("float*", 0x7C6708)
-
 local UP = tes3vector3.new(0, 0, 1)
+local SIMULATION_TIME = require("ffi").cast("float*", 0x7C6708)
 
 local function getRandomRotation(rangeX, rangeY, rangeZ)
     local x = math.rad(math.random(-rangeX, rangeX))
@@ -55,7 +59,7 @@ function this.createExplosionVFX(position)
     local curveUpward = curveCenter + UP * (distance / 6)
 
     local vfx = tes3.createVisualEffect({
-        object = VFX_EXPLODE, ---@diagnostic disable-line: assign-type-mismatch
+        object = VFX_EXPLODE,
         lifespan = VFX_EXPLODE_DURATION,
         position = position,
     })
@@ -76,7 +80,7 @@ function this.createExplosionVFX(position)
 
     -- controls which lightning texture is used
     local switch = sceneNode:getObjectByName("LightningSwitch")
-    switch.switchIndex = math.random(0, VFX_SWITCH_CHILDREN - 1)
+    switch.switchIndex = math.random(0, VFX_CHILDREN_COUNT - 1)
 
     -- ensure controllers start from beginning
     local phase = -SIMULATION_TIME[0]
@@ -97,7 +101,7 @@ end
 
 function this.createLightningLight(position)
     local light = tes3.createReference({
-        object = VFX_EXPLODE_LIGHT, ---@diagnostic disable-line: assign-type-mismatch
+        object = VFX_EXPLODE_LIGHT,
         position = position,
         cell = tes3.player.cell,
     })
@@ -116,7 +120,7 @@ end
 
 function this.createLightningStrike(position, explode)
     local vfx = tes3.createVisualEffect({
-        object = VFX_STRIKE, ---@diagnostic disable-line: assign-type-mismatch
+        object = VFX_STRIKE,
         lifespan = VFX_STRIKE_DURATION + VFX_EXPLODE_DURATION,
         position = position,
     })
@@ -124,7 +128,7 @@ function this.createLightningStrike(position, explode)
 
     -- controls which lightning texture is used
     local switch = sceneNode:getObjectByName("LightningSwitch")
-    switch.switchIndex = math.random(0, VFX_SWITCH_CHILDREN - 1)
+    switch.switchIndex = math.random(0, VFX_CHILDREN_COUNT - 1)
 
     -- ensure controllers start from beginning
     local shape = switch:getActiveChild()
