@@ -34,7 +34,7 @@ Aronil:
         At Firemoth, under 50% HP:
             "How many are there? This is insane, I shouldn't have signed up for this!"
         At Firemoth, under 25% HP:
-            "We should take a rest. The fort won't disappear over night."
+            "We should take a rest. The fort won't disappear overnight."
 
 
 Hyrondir:

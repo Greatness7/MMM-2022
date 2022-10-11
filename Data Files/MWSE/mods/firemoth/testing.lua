@@ -1,4 +1,5 @@
 local lightning = require("firemoth.weather.lightning")
+local camera = require("firemoth.weather.camera")
 
 local function onKeyDownZ(e)
     if not e.isAltDown then return end
@@ -12,6 +13,7 @@ local function onKeyDownZ(e)
     if rayhit and rayhit.intersection then
         local position = rayhit.intersection:copy()
         lightning.createLightningStrike(position, --[[expode]] true)
+        camera.startCameraShake(--[[duration]] 5, --[[strength]] 1.0)
     end
 
     return false
