@@ -35,6 +35,7 @@ local function setWorldTranslation(node, translation)
     node.translation = translation
 end
 
+---@param position tes3vector3
 function this.createExplosionVFX(position)
     local direction = getRandomRotation(70, 70, 360) * UP
 
@@ -87,6 +88,7 @@ function this.createExplosionVFX(position)
     anim.children[1].controller.phase = phase
 end
 
+---@param position tes3vector3
 function this.createLightningSound(position)
     local clip = 8192 * 2
     local dist = tes3.getPlayerEyePosition():distance(position)
@@ -99,6 +101,7 @@ function this.createLightningSound(position)
     })
 end
 
+---@param position tes3vector3
 function this.createLightningLight(position)
     local light = tes3.createReference({
         object = VFX_EXPLODE_LIGHT,
@@ -108,6 +111,7 @@ function this.createLightningLight(position)
     light.modified = false
 end
 
+---@param position tes3vector3
 function this.createLightningExplosion(position)
     -- avoid intersections inside mesh geometry
     position = position + UP * 32
@@ -118,6 +122,8 @@ function this.createLightningExplosion(position)
     end
 end
 
+---@param position tes3vector3
+---@param explode boolean
 function this.createLightningStrike(position, explode)
     local vfx = tes3.createVisualEffect({
         object = VFX_STRIKE,
