@@ -17,7 +17,7 @@ end)
 
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
-    if (not table.find(whitelistedTracks, e.music) and e.situation == tes3.musicSituation.explore) then
+    if (e.situation == tes3.musicSituation.explore and not table.find(whitelistedTracks, e.music)) then
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
         return false
     end
