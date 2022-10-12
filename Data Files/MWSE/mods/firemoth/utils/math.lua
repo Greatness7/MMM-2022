@@ -17,4 +17,27 @@ function this.boundsIntersect(a, b)
     return dist <= radi
 end
 
+---@param rangeX number
+---@param rangeY number
+---@param rangeZ number
+---@return tes3matrix33
+function this.getRandomRotation(rangeX, rangeY, rangeZ)
+    local x = math.rad(math.random(-rangeX, rangeX))
+    local y = math.rad(math.random(-rangeY, rangeY))
+    local z = math.rad(math.random(-rangeZ, rangeZ))
+    local r = tes3matrix33.new()
+    r:fromEulerXYZ(x, y, z)
+    return r
+end
+
+---@param node niNode
+---@param translation tes3vector3
+function this.setWorldTranslation(node, translation)
+    if node.parent then
+        local t = node.parent.worldTransform
+        translation = (t.rotation * t.scale):transpose() * (translation - t.translation)
+    end
+    node.translation = translation
+end
+
 return this

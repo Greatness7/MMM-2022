@@ -1,43 +1,39 @@
+--- @diagnostic disable: assign-type-mismatch
+
+local camera = require("firemoth.weather.camera")
+local utils = require("firemoth.utils")
+
 local this = {}
 
 --- @type tes3static
---- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_EXPLODE = assert(tes3.getObject("fm_lightn_expl_vfx"))
 local VFX_EXPLODE_DURATION = 0.20
 
 --- @type tes3light
---- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_EXPLODE_LIGHT = assert(tes3.getObject("fm_lightn_expl_lit"))
 local VFX_CHILDREN_COUNT = 4
 
 --- @type tes3static
---- @diagnostic disable-next-line: assign-type-mismatch
 local VFX_STRIKE = assert(tes3.getObject("fm_lightn_strike_vfx"))
 local VFX_STRIKE_DURATION = 0.15
 
 local UP = tes3vector3.new(0, 0, 1)
 local SIMULATION_TIME = require("ffi").cast("float*", 0x7C6708)
 
-local function getRandomRotation(rangeX, rangeY, rangeZ)
-    local x = math.rad(math.random(-rangeX, rangeX))
-    local y = math.rad(math.random(-rangeY, rangeY))
-    local z = math.rad(math.random(-rangeZ, rangeZ))
-    local r = tes3matrix33.new()
-    r:fromEulerXYZ(x, y, z)
-    return r
-end
-
-local function setWorldTranslation(node, translation)
-    if node.parent then
-        local t = node.parent.worldTransform
-        translation = (t.rotation * t.scale):transpose() * (translation - t.translation)
+function this.createLightningFlash()
+    local weather = tes3.getCurrentWeather()
+    if weather and weather.index == tes3.weather.thunder then
+        local f = weather.thunderFrequency
+        weather.thunderFrequency = 1e+6
+        timer.delayOneFrame(function()
+            weather.thunderFrequency = f
+        end)
     end
-    node.translation = translation
 end
 
 ---@param position tes3vector3
 function this.createExplosionVFX(position)
-    local direction = getRandomRotation(70, 70, 360) * UP
+    local direction = utils.math.getRandomRotation(70, 70, 360) * UP
 
     local rayhit = tes3.rayTest({
         position = position,
@@ -73,11 +69,11 @@ function this.createExplosionVFX(position)
 
     -- controls the mid point of the lightning strike
     local bone2 = sceneNode:getObjectByName("2")
-    setWorldTranslation(bone2, curveUpward)
+    utils.math.setWorldTranslation(bone2, curveUpward)
 
     -- controls the end point of the lightning strike
     local bone3 = sceneNode:getObjectByName("3")
-    setWorldTranslation(bone3, intersection)
+    utils.math.setWorldTranslation(bone3, intersection)
 
     -- controls which lightning texture is used
     local switch = sceneNode:getObjectByName("LightningSwitch")
@@ -105,8 +101,8 @@ end
 function this.createLightningLight(position)
     local light = tes3.createReference({
         object = VFX_EXPLODE_LIGHT,
-        position = position,
         cell = tes3.player.cell,
+        position = position,
     })
     light.modified = false
 end
@@ -149,6 +145,8 @@ function this.createLightningStrike(position, explode)
                 this.createLightningExplosion(position)
                 this.createLightningSound(position)
                 this.createLightningLight(position)
+                this.createLightningFlash()
+                camera.startCameraShake(--[[duration]] 5, --[[strength]] 1.0)
             end,
         })
     end
