@@ -130,12 +130,34 @@ function this.createLightningStrike(position, explode)
 
     -- controls which lightning texture is used
     local switch = sceneNode:getObjectByName("LightningSwitch")
-    switch.switchIndex = math.random(0, VFX_CHILDREN_COUNT - 1)
+    local randIndex = math.random(1, VFX_CHILDREN_COUNT)
+    local nextIndex = randIndex % VFX_CHILDREN_COUNT + 1
 
-    -- ensure controllers start from beginning
-    local shape = switch:getActiveChild()
+    local s1 = switch.children[randIndex]
+    local s2 = switch.children[nextIndex]
+
+    local c1 = switch.controller
+    local c2 = switch.controller.nextController
+    local c3 = switch.controller.nextController.nextController
+    local c4 = switch.controller.nextController.nextController.nextController
+
     local phase = -SIMULATION_TIME[0]
-    shape.controller.phase = phase
+
+    c1:setTarget(s1)
+    c1.phase = phase
+    c1.active = true
+
+    c2:setTarget(s2)
+    c2.phase = phase
+    c2.active = true
+
+    c3:setTarget(s1)
+    c3.phase = phase
+    c3.active = true
+
+    c4:setTarget(s2)
+    c4.phase = phase
+    c4.active = true
 
     if explode then
         timer.start({
