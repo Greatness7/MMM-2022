@@ -65,9 +65,9 @@ end
 
 local function update(e)
     local duration, strength = unpack(e.timer.data)
-    local elapsed = (e.timer.iterations - 1) * e.timer.duration
+    local remaining = e.timer.iterations * e.timer.duration + e.timer.timeLeft
 
-    local t = 1.0 - (elapsed / duration)
+    local t = 1.0 - remaining / duration
     strength = math.lerp(strength, 0, t)
 
     local time = SIMULATION_TIME[0]
