@@ -137,9 +137,9 @@ function this.createLightningStrike(position, explode)
     local s2 = switch.children[nextIndex]
 
     local c1 = switch.controller
-    local c2 = switch.controller.nextController
-    local c3 = switch.controller.nextController.nextController
-    local c4 = switch.controller.nextController.nextController.nextController
+    local c2 = c1.nextController
+    local c3 = c2.nextController
+    local c4 = c3.nextController
 
     local phase = -SIMULATION_TIME[0]
 
