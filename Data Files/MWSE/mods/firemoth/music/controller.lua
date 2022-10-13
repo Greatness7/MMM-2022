@@ -51,7 +51,7 @@ end
 
 local function populateTracks()
     for track in lfs.dir(MUSICDIR) do
-		if track ~= ".." and track ~= "." and track ~= "Special" then
+		if (track ~= ".." and track ~= "." and track ~= "Special") and (string.endswith(track, ".mp3")) then
             table.insert(whitelistedTracks, #whitelistedTracks+1, "fm\\" .. track)
         end
     end
