@@ -52,14 +52,23 @@ local function update(e)
         and normalProx(currDist) > 0
     then
         playerTargetRate = calculateTargetRate(currDist)
-        debug.log(playerTargetRate - 1)
-        debug.log(frequency)
-        debug.log(1 - utils.math.bellCurve(normalProx(currDist), (frequency - 1) * playerTargetRate, 0, frequency) + (frequency - 1))
+        -- debug.log(playerTargetRate - 1)
+        -- debug.log(frequency)
+        -- debug.log(1 - utils.math.bellCurve(normalProx(currDist), (frequency - 1) * playerTargetRate, 0, frequency) + (frequency - 1))
         if (lightningTimer == nil or lightningTimer.state == timer.expired) then
             lightningTimer = timer.start{
                 duration = math.max(1, 1 - utils.math.bellCurve(normalProx(currDist), (frequency - 1) * playerTargetRate, 0, frequency) + (frequency - 1)),
                 callback = function ()
                     lightning.createLightningStrike(offsetPos(tes3.player.position, normalProx(currDist)), true, (1 - utils.math.bellCurve(normalProx(currDist), 1, 0, frequency / 2)))
+                    --- @type tes3spell
+                    local me = tes3.getObject("lightning bolt")
+                    me.effects[1].duration = math.max(1, 1 - utils.math.bellCurve(normalProx(currDist), (frequency - 1) * playerTargetRate, 0, frequency) + (frequency - 1))
+                    me.effects[1].min = damage
+                    me.effects[1].max = damage
+                    tes3.applyMagicSource{
+                        reference = tes3.player,
+                        source = me
+                    }
                 end
             }
         end
@@ -75,6 +84,15 @@ local function update(e)
                     duration = math.max(1, 1 - utils.math.bellCurve(normalProx(compDist), (frequency - 1) * npcTargetRate[companion], 0, frequency) + (frequency - 1)),
                     callback = function ()
                         lightning.createLightningStrike(offsetPos(companion.position, normalProx(compDist)), true, (1 - utils.math.bellCurve(normalProx(currDist), 1, 0, frequency / 2)))
+                        --- @type tes3spell
+                        local me = tes3.getObject("lightning bolt")
+                        me.effects[1].duration = math.max(1, 1 - utils.math.bellCurve(normalProx(compDist), (frequency - 1) * npcTargetRate[companion], 0, frequency) + (frequency - 1))
+                        me.effects[1].min = damage
+                        me.effects[1].max = damage
+                        tes3.applyMagicSource{
+                            reference = companion,
+                            source = me
+                        }
                     end
                 }
             end
