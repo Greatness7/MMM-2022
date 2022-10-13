@@ -40,7 +40,7 @@ function this.isFiremothCell(cell)
 end
 
 function this.getNearbyCompanions()
-    nearbyCompanions = {}
+    local nearbyCompanions = {}
     for companion in tes3.iterate(tes3.mobilePlayer.friendlyActors) do
         if tes3.getCurrentAIPackageId(companion) == tes3.aiPackage.follow then
             table.insert(nearbyCompanions, companion)
@@ -64,7 +64,7 @@ end
 ---
 --- @return table<tes3reference, number>
 function this.getCompanionsFiremothDistance()
-    local companions = this.getNearbyCompanions()
+    local companions = this.getNearbyCompanions() or {}
     local distances = {}
 
     for _, companion in ipairs(companions) do

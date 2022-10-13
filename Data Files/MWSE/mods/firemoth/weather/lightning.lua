@@ -120,7 +120,7 @@ end
 
 ---@param position tes3vector3
 ---@param explode boolean
-function this.createLightningStrike(position, explode)
+function this.createLightningStrike(position, explode, strength)
     local vfx = tes3.createVisualEffect({
         object = VFX_STRIKE,
         lifespan = VFX_STRIKE_DURATION + VFX_EXPLODE_DURATION,
@@ -168,7 +168,7 @@ function this.createLightningStrike(position, explode)
                 this.createLightningSound(position)
                 this.createLightningLight(position)
                 this.createLightningFlash()
-                camera.startCameraShake(--[[duration]] 5, --[[strength]] 1.0)
+                camera.startCameraShake(--[[duration]] 5, --[[strength]] strength or 1.0)
             end,
         })
     end
