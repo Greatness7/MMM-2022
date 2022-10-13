@@ -27,6 +27,10 @@ function this.createLightningFlash()
         weather.thunderFrequency = 1e+6
         timer.delayOneFrame(function()
             weather.thunderFrequency = f
+            weather.thunderSound1:stop()
+            weather.thunderSound2:stop()
+            weather.thunderSound3:stop()
+            weather.thunderSound4:stop()
         end)
     end
 end
