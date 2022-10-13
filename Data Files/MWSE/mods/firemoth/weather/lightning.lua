@@ -91,7 +91,7 @@ function this.createLightningSound(position)
     local volume = math.remap(math.min(dist, clip), 0, clip, 1, 0)
 
     tes3.playSound({
-        sound = "AB_Thunderclap" .. math.random(0, 4),
+        sound = "tew_fm_thunder" .. math.random(1, 6),
         reference = tes3.player,
         volume = volume,
     })
