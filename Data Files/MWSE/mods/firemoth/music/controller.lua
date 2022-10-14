@@ -1,6 +1,7 @@
 local utils = require("firemoth.utils")
 local MUSICDIR = "Data Files\\Music\\fm\\"
 local SILENCE = "fm\\Special\\silence.mp3"
+local config = require("firemoth.mcm.config")
 local previousCell
 
 --- @type function
@@ -18,8 +19,8 @@ end)
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
     local cell = tes3.getPlayerCell()
-    if (isFiremothCell(cell) and e.situation == tes3.musicSituation.explore and not table.find(whitelistedTracks, e.music)) then
-        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
+    if (isFiremothCell(cell) and not table.find(whitelistedTracks, e.music)) then
+        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
         return false
     end
 end
@@ -29,19 +30,18 @@ local function onCombatStopped()
     local cell = tes3.getPlayerCell()
     local isFiremoth = isFiremothCell(cell)
     if isFiremoth then
-        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
+        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
     end
 end
 
---- @param e cellChangedEventData
-local function firemothConditionCheck(e)
+local function firemothConditionCheck()
     local cell = tes3.getPlayerCell()
     local isFiremoth = isFiremothCell(cell)
     local wasFiremoth = previousCell and isFiremothCell(previousCell)
 
     if isFiremoth and not wasFiremoth then
         waterLayer.sound.volume = 0
-        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = tes3.musicSituation.explore}
+        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
     elseif wasFiremoth and not isFiremoth then
         waterLayer.sound.volume = waterLayer.prevVolume
         tes3.streamMusic{path = SILENCE, situation = tes3.musicSituation.explore}

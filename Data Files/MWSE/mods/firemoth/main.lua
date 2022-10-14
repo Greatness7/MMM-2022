@@ -15,3 +15,7 @@ event.register("initialized", function()
         dofile("firemoth.testing")
     end
 end)
+
+event.register("modConfigReady", function()
+    dofile("Data Files\\MWSE\\mods\\firemoth\\mcm\\menu.lua")
+end)
