@@ -2,7 +2,7 @@ local lightning = require("firemoth.weather.lightning")
 local utils = require("firemoth.utils")
 
 local MIN_DISTANCE = 8192 * 0.25
-local MAX_DISTANCE = 8192 * 3.5
+local MAX_DISTANCE = 8192 * 3
 
 --- @type mwseTimer
 local lightningTimer = nil
@@ -62,7 +62,7 @@ local function update(e)
                     lightning.createLightningStrike(offsetPos(tes3.player.position, normalProx(currDist)), true, (1 - utils.math.bellCurve(normalProx(currDist), 1, 0, frequency / 2)))
                     --- @type tes3spell
                     local me = tes3.getObject("lightning bolt")
-                    me.effects[1].duration = math.max(1, 1 - utils.math.bellCurve(normalProx(currDist), (frequency - 1) * playerTargetRate, 0, frequency) + (frequency - 1))
+                    me.effects[1].duration = 1
                     me.effects[1].min = damage
                     me.effects[1].max = damage
                     tes3.applyMagicSource{
@@ -86,7 +86,7 @@ local function update(e)
                         lightning.createLightningStrike(offsetPos(companion.position, normalProx(compDist)), true, (1 - utils.math.bellCurve(normalProx(currDist), 1, 0, frequency / 2)))
                         --- @type tes3spell
                         local me = tes3.getObject("lightning bolt")
-                        me.effects[1].duration = math.max(1, 1 - utils.math.bellCurve(normalProx(compDist), (frequency - 1) * npcTargetRate[companion], 0, frequency) + (frequency - 1))
+                        me.effects[1].duration = 1
                         me.effects[1].min = damage
                         me.effects[1].max = damage
                         tes3.applyMagicSource{
