@@ -92,4 +92,10 @@ function this.startCameraShake(duration, strength)
     })
 end
 
+-- Ensure camera is reset when loading a new save file.
+event.register(tes3.event.loaded, function()
+    updatePosition(0, 0)
+    updateRotation(0, 0)
+end)
+
 return this
