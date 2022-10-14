@@ -1,20 +1,15 @@
---- @diagnostic disable: assign-type-mismatch
-
 local camera = require("firemoth.weather.camera")
 local utils = require("firemoth.utils")
 
 local this = {}
 
---- @type tes3static
-local VFX_EXPLODE = assert(tes3.getObject("fm_lightn_expl_vfx"))
+local VFX_EXPLODE = assert(tes3.getObject("fm_lightn_expl_vfx")) ---@cast VFX_EXPLODE tes3static
 local VFX_EXPLODE_DURATION = 0.20
 
---- @type tes3light
-local VFX_EXPLODE_LIGHT = assert(tes3.getObject("fm_lightn_expl_lit"))
+local VFX_EXPLODE_LIGHT = assert(tes3.getObject("fm_lightn_expl_lit")) ---@cast VFX_EXPLODE_LIGHT tes3light
 local VFX_CHILDREN_COUNT = 4
 
---- @type tes3static
-local VFX_STRIKE = assert(tes3.getObject("fm_lightn_strike_vfx"))
+local VFX_STRIKE = assert(tes3.getObject("fm_lightn_strike_vfx")) ---@cast VFX_STRIKE tes3static
 local VFX_STRIKE_DURATION = 0.15
 
 local UP = tes3vector3.new(0, 0, 1)
@@ -52,7 +47,7 @@ function this.createExplosionVFX(position)
     -- if we didn't hit any object, use some randomized intersection
     if not (distance and intersection) then
         distance = math.random(256, 1024)
-        intersection = position + direction * distance ---@diagnostic disable-line: cast-local-type
+        intersection = position + direction * distance
     end
 
     -- center point of the lightning, bias this upwards so we curve
@@ -72,11 +67,11 @@ function this.createExplosionVFX(position)
     anim.scale = distance
 
     -- controls the mid point of the lightning strike
-    local bone2 = sceneNode:getObjectByName("2")
+    local bone2 = sceneNode:getObjectByName("2") ---@cast bone2 niNode
     utils.math.setWorldTranslation(bone2, curveUpward)
 
     -- controls the end point of the lightning strike
-    local bone3 = sceneNode:getObjectByName("3")
+    local bone3 = sceneNode:getObjectByName("3") ---@cast bone3 niNode
     utils.math.setWorldTranslation(bone3, intersection)
 
     -- controls which lightning texture is used
@@ -98,7 +93,7 @@ function this.createLightningSound(position)
         sound = "tew_fm_thunder" .. math.random(1, 6),
         reference = tes3.player,
         volume = volume,
-        mixChannel = tes3.soundMix.master
+        mixChannel = tes3.soundMix.master,
     })
 end
 
