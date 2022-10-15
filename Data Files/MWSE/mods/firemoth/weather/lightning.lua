@@ -137,7 +137,7 @@ function this.createLightningStrike(position, strength, explode)
     -- controls which lightning texture is used
     local switch = sceneNode:getObjectByName("LightningSwitch")
     local randIndex = math.random(1, VFX_CHILDREN_COUNT)
-    local nextIndex = randIndex % VFX_CHILDREN_COUNT + 1
+    local nextIndex = (randIndex + math.random(0, 2)) % VFX_CHILDREN_COUNT + 1
 
     local s1 = switch.children[randIndex]
     local s2 = switch.children[nextIndex]
