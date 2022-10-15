@@ -15,17 +15,19 @@ local VFX_STRIKE_DURATION = 0.15
 local UP = tes3vector3.new(0, 0, 1)
 local SIMULATION_TIME = require("ffi").cast("float*", 0x7C6708)
 
+local function toggleThunderSounds(enabled)
+    mwse.memory.writeByte({ address = 0x44CC99, byte = enabled and 0x84 or 0x85 }) ---@diagnostic disable-line
+end
+
 function this.createLightningFlash()
     local weather = tes3.getCurrentWeather()
     if weather and weather.index == tes3.weather.thunder then
         local f = weather.thunderFrequency
         weather.thunderFrequency = 1e+6
+        toggleThunderSounds(false)
         timer.delayOneFrame(function()
             weather.thunderFrequency = f
-            weather.thunderSound1:stop()
-            weather.thunderSound2:stop()
-            weather.thunderSound3:stop()
-            weather.thunderSound4:stop()
+            toggleThunderSounds(true)
         end)
     end
 end
@@ -87,7 +89,7 @@ end
 function this.createLightningSound(position)
     local clip = 8192 * 2
     local dist = tes3.getPlayerEyePosition():distance(position)
-    local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0)
+    local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0.25)
 
     tes3.playSound({
         sound = "tew_fm_thunder" .. math.random(1, 6),
