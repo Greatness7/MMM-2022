@@ -3,6 +3,7 @@ local MUSICDIR = "Data Files\\Music\\fm\\"
 local SILENCE = "fm\\Special\\silence.mp3"
 local config = require("firemoth.mcm.config")
 local previousCell
+local waterVolume = 0.4
 
 --- @type function
 local isFiremothCell = utils.cells.isFiremothCell
@@ -10,7 +11,7 @@ local isFiremothCell = utils.cells.isFiremothCell
 --- @type string[]
 local whitelistedTracks = {}
 
-local waterLayer = { volume = 0 }
+local waterLayer = { volume = waterVolume }
 event.register("loaded", function()
     waterLayer.sound = assert(tes3.getSound("Water Layer"))
     waterLayer.prevVolume = waterLayer.sound.volume
@@ -40,7 +41,7 @@ local function firemothConditionCheck()
     local wasFiremoth = previousCell and isFiremothCell(previousCell)
 
     if isFiremoth and not wasFiremoth then
-        waterLayer.sound.volume = 0
+        waterLayer.sound.volume = waterVolume
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
     elseif wasFiremoth and not isFiremoth then
         waterLayer.sound.volume = waterLayer.prevVolume
