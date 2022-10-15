@@ -99,12 +99,15 @@ end
 
 ---@param position tes3vector3
 function this.createLightningLight(position)
-    local light = tes3.createReference({
-        object = VFX_EXPLODE_LIGHT,
-        cell = tes3.player.cell,
-        position = position,
-    })
-    light.modified = false
+    local cell = tes3.getPlayerCell()
+    if cell.isInterior or cell:isPointInCell(position.x, position.y) then
+        local light = tes3.createReference({
+            object = VFX_EXPLODE_LIGHT,
+            position = position,
+            cell = cell,
+        })
+        light.modified = false
+    end
 end
 
 ---@param position tes3vector3
