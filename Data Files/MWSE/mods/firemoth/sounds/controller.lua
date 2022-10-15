@@ -6,7 +6,7 @@ local interiorTimer
 
 local function playInteriorSound()
     tes3.playSound({
-        sound = "tew_fm_int" .. math.random(1, 13),
+        sound = "tew_fm_int" .. math.random(1, 14),
         reference = tes3.player,
         volume = 1.0 * math.random(4,10) / 10,
         mixChannel = tes3.soundMix.master
