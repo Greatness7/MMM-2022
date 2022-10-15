@@ -89,12 +89,18 @@ end
 function this.createLightningSound(position)
     local clip = 8192 * 2
     local dist = tes3.getPlayerEyePosition():distance(position)
-    local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0.25)
+    local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0.3)
+    local distant = ""
+ 
+    if volume < 0.5 then
+        distant = "dist"
+        volume = volume + 0.3
+    end
 
     tes3.playSound({
-        sound = "tew_fm_thunder" .. math.random(1, 6),
+        sound = "tew_fm_thunder" .. distant .. math.random(1, 6),
         reference = tes3.player,
-        volume = volume,
+        volume = 0,
         mixChannel = tes3.soundMix.master,
     })
 end
