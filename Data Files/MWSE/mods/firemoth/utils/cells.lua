@@ -2,7 +2,7 @@ local this = {}
 
 local XY = tes3vector3.new(1, 1, 0)
 
-local FIREMOTH_REGION_ORIGIN = tes3vector3.new(-57344, -77824, 0)
+this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(-57344, -77824, 0)
 
 local INTERIORS = {
     ["Firemoth, Keep"] = true,
@@ -46,6 +46,7 @@ function this.getNearbyCompanions()
             table.insert(nearbyCompanions, companion)
         end
     end
+    return nearbyCompanions
 end
 
 --- Distance from the center for Firemoth Region.
@@ -56,7 +57,7 @@ function this.getFiremothDistance()
     if cell.isInterior then
         return (INTERIORS[cell.name] and 0) or math.fhuge
     else
-        return (tes3.player.position * XY):distance(FIREMOTH_REGION_ORIGIN)
+        return (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
     end
 end
 
@@ -72,7 +73,7 @@ function this.getCompanionsFiremothDistance()
         if cell.isInterior then
             distances[companion] = (INTERIORS[cell.name] and 0) or math.fhuge
         else
-            distances[companion] = (tes3.player.position * XY):distance(FIREMOTH_REGION_ORIGIN)
+            distances[companion] = (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
         end
     end
 
