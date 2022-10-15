@@ -11,7 +11,7 @@ local function onKeyDownZ(e)
 
     if rayhit and rayhit.intersection then
         local position = rayhit.intersection:copy()
-        lightning.createLightningStrike(position, --[[expode]] true)
+        lightning.createLightningStrike(position, --[[strength]] 1.0, --[[expode]] true)
     end
 
     return false

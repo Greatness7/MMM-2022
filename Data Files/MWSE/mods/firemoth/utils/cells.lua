@@ -61,23 +61,4 @@ function this.getFiremothDistance()
     end
 end
 
---- Distance from the center for Firemoth Region.
----
---- @return table<tes3reference, number>
-function this.getCompanionsFiremothDistance()
-    local companions = this.getNearbyCompanions() or {}
-    local distances = {}
-
-    for _, companion in ipairs(companions) do
-        local cell = tes3.player.cell
-        if cell.isInterior then
-            distances[companion] = (INTERIORS[cell.name] and 0) or math.fhuge
-        else
-            distances[companion] = (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
-        end
-    end
-
-    return distances
-end
-
 return this
