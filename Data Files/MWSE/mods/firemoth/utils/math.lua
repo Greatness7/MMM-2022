@@ -1,5 +1,7 @@
 local this = {}
 
+local XY = tes3vector3.new(1, 1, 0)
+
 ---@param x number Time function
 ---@param a number Amplitude
 ---@param o number Offset
@@ -40,9 +42,11 @@ function this.setWorldTranslation(node, translation)
     node.translation = translation
 end
 
-function this.xyDistance(first, second)
-    local xy = tes3vector3.new(1, 1, 0)
-    return (first * xy):distance(second * xy)    
+---@param a tes3vector3
+---@param b tes3vector3
+---@return number
+function this.xyDistance(a, b)
+    return (a * XY):distance(b * XY)
 end
 
 return this
