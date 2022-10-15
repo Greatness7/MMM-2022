@@ -60,13 +60,13 @@ local function update(e)
                 
                 -- target companions first
                 for _, companion in ipairs(utils.cells.getNearbyCompanions()) do
-                    if ((companion.position.z <= 0 and strikePos:distance(companion.position) < 1024) or strikePos:distance(companion.position) < 256) then
+                    if ((companion.position.z <= 0 and utils.math.xyDistance(strikePos, companion.position) < 1024) or utils.math.xyDistance(strikePos, companion.position) < 256) then
                         strikePos = companion.position
                         applyDamage(companion)
                     end
                 end
                 -- prefer targeting the player if they're closer 
-                if ((tes3.player.position.z <= 0 and strikePos:distance(tes3.player.position) < 1024) or strikePos:distance(tes3.player.position) < 256) then
+                if ((tes3.player.position.z <= 0 and utils.math.xyDistance(strikePos, tes3.player.position) < 1024) or utils.math.xyDistance(strikePos, tes3.player.position) < 256) then
                     strikePos = tes3.player.position
                     applyDamage(tes3.player)
                 end

@@ -40,4 +40,9 @@ function this.setWorldTranslation(node, translation)
     node.translation = translation
 end
 
+function this.xyDistance(first, second)
+    local xy = tes3vector3.new(1, 1, 0)
+    return (first * xy):distance(second * xy)    
+end
+
 return this
