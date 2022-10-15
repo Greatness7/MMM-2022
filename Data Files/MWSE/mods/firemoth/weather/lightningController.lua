@@ -20,7 +20,7 @@ local playerTargetRate = 0
 local function offsetPos(pos, f)
     local rot = tes3matrix33.new()
     rot:fromEulerXYZ(0, 0, math.random(-180, 180))
-    return tes3vector3.new(pos.x, pos.y, 0) + (tes3.player.sceneNode.rotation + rot):transpose().y * (MAX_DISTANCE - math.lerp(MIN_DISTANCE, MAX_DISTANCE, f))
+    return tes3vector3.new(pos.x, pos.y, 0) + rot:transpose().y * (MAX_DISTANCE - math.lerp(MIN_DISTANCE, MAX_DISTANCE, f))
 end
 
 local function normalProx(dist)
@@ -56,7 +56,7 @@ local function update(e)
         lightningTimer = timer.start{
             duration = math.random(1, frequency),
             callback = function ()
-                local strikePos = offsetPos(utils.cells.FIREMOTH_REGION_ORIGIN, math.random(0, 100) / 100)
+                local strikePos = offsetPos(utils.cells.FIREMOTH_REGION_ORIGIN, math.random())
                 
                 -- target companions first
                 for _, companion in ipairs(utils.cells.getNearbyCompanions()) do
