@@ -89,7 +89,7 @@ local function update()
     local shakeStrength = math.remap(math.min(strikeDist, MAX_DISTANCE), 0, MAX_DISTANCE, 0.3, 0)
     lightning.createLightningStrike(strikePos, shakeStrength)
 
-    tes3.messageBox("distance: %.2f | shake: %.2f", strikeDist, shakeStrength)
+    -- tes3.messageBox("distance: %.2f | shake: %.2f", strikeDist, shakeStrength)
 end
 
 event.register(tes3.event.loaded, function()
