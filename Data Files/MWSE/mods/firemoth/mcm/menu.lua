@@ -17,12 +17,12 @@ local template = mwse.mcm.createTemplate{
         label = string.format("")
     }
 	mainPage:createDropdown {
-		label = "Turn off battle music in Firemoth?",
+		label = "Turn off battle music in Firemoth? Default: Yes.",
 		options = {
 			{ label = "Yes", value = tes3.musicSituation.uninterruptible },
 			{ label = "No", value = tes3.musicSituation.explore }
 		},
-		restartRequired = false,
+		restartRequired = true,
 		variable = registerVariable("musicSituation")
 	}
 
