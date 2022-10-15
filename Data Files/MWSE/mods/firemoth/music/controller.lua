@@ -19,7 +19,7 @@ end)
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
     local cell = tes3.getPlayerCell()
-    if (isFiremothCell(cell) and not table.find(whitelistedTracks, e.music)) then
+    if isFiremothCell(cell) then
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
         return false
     end
@@ -65,5 +65,10 @@ end
 populateTracks()
 event.register(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
 event.register(tes3.event.cellChanged, firemothConditionCheck)
-event.register(tes3.event.combatStopped, onCombatStopped)
 event.register(tes3.event.load, resetOnLoad)
+
+-- For some reason a config check inside the event didn't work, and we don't want to claim the event
+-- This requires restart after toggling in MCM, but oh well
+if config.musicSituation == tes3.musicSituation.explore then
+    event.register(tes3.event.combatStopped, onCombatStopped)
+end
