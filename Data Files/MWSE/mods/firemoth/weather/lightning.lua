@@ -100,7 +100,7 @@ function this.createLightningSound(position)
     tes3.playSound({
         sound = "tew_fm_thunder" .. distant .. math.random(1, 6),
         reference = tes3.player,
-        volume = 0,
+        volume = volume,
         mixChannel = tes3.soundMix.master,
     })
 end
