@@ -21,7 +21,8 @@ end)
 local function prioritiseFiremothMusic(e)
     local cell = tes3.getPlayerCell()
     if isFiremothCell(cell) then
-        tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
+        e.music = table.choice(whitelistedTracks)
+        e.situation = config.musicSituation
         return false
     end
 end
