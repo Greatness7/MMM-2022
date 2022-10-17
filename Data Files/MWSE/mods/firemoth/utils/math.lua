@@ -49,4 +49,25 @@ function this.xyDistance(a, b)
     return (a * XY):distance(b * XY)
 end
 
+---@param n number
+---@param m number
+function this.nonRepeatNumberRNG(n, m)
+    local previousRandom = 0
+
+    return function ()
+        previousRandom = (previousRandom + math.random(n, m - 1)) % m
+        return previousRandom
+    end
+end
+
+---@param t table
+function this.nonRepeatTableRNG(t)
+    local previousRandom = 0
+    
+    return function ()
+        previousRandom = (previousRandom + math.random(1, #t - 1)) % #t
+        return t[previousRandom]        
+    end
+end
+
 return this
