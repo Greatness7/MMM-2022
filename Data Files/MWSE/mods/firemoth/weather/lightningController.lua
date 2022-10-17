@@ -52,12 +52,12 @@ local function update()
     end
 
     --- Ticks 4 times per second.
-    --- Forces at least one strike per 1.35 seconds.
-    --- Strikes must be at least 0.35 seconds apart.
+    --- Forces at least one strike per 2.35 seconds.
+    --- Strikes must be at least 1.35 seconds apart.
     --- Each tick has 5% chance of making a strikes.
     local dt = os.clock() - lastStrikeTime
-    if dt < 1.35 then
-        if dt <= 0.35 then -- last strike too recent
+    if dt < 2.35 then
+        if dt <= 1.35 then -- last strike too recent
             return
         elseif math.random() > 0.05 then -- rng skip
             return
