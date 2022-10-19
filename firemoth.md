@@ -74,35 +74,17 @@ Argonian Sailor. Provides travel to/from the Firemoth island and Seyda Neen.
 
 Altmer battlemage who joins you on the expedition. High level, doubts your competency.
 
-<details>
-(Put any character ideas/details in here.)
-
-A very powerful mage from the Summerset Isles. Wears a robe and some magic scrolls/items and a unique enchanted staff. Specialized in destruction and illusion magic. Will later die when attempting to open the seal (with a special scroll he carries with him) protecting the velothi tomb that Grurn resides in, if not previously killed.
-</details>
-
 #### Hjrondir
 
 > *Lead the way! We're here to kill!*
 
 A nord warrior who joins you on the expedition. Loyal, battle hungry.
 
-<details>
-(Put any character ideas/details in here.)
-
-A Nord mercenary hired by the Imperial Legion to help reclaim Fort Firemoth. A very powerful fighter wielding a unique silver war axe and regular steel armor with bracers. Will go insane and attack the player during the expedition into the velothi tomb, if not previously killed.
-</details>
-
 #### Mara
 
 > *I've seen worse. Lead On.*
 
 Bosmer archer who joins you on the expedition. Cocky, bored?
-
-<details>
-(Put any character ideas/details in here.)
-
-An imperial lower ranking member of the Imperial Legion sent to help reclaim Fort Firemoth. As a former Imperial Cult priestess she is specialized in healing and holy (Turn Undead) magic. Wears regular heavy imperial legion armor with a shield and mace. Can become a companion/underling if she survives the entire quest chain and you return to Sellus Gravius.
-</details>
 
 #### JHanir
 
@@ -146,37 +128,6 @@ Below is a rough bare-bones outline of the quest stages, and random related idea
     * Re-establish connections with the EEC to handle ebony trade.
     * Rebuild the docks to allow new fast travel locations.
     * Collect as many ideas as we can and implement the best ones!
-
-<details>
-(Text from Sephumbra's previous edit)
-
-After teaming up with the rest of the party the player takes a boat to head to the island, where they will proceed to retake the island before heading into the ebony mines of the fort.
-Upon reaching the entrance of the velothi tomb at the end of the mines Aronil will attempt to unlock the seal protecting the entrance with a special scroll he has prepared beforehand.
-Upon using it the seal will be broken, Aronil dies and all remaining members will be afflicted by a curse.
-If Aronil dies beforehand the player is required to break the seal with the scroll found on his body instead.
-The player will not die doing this, but still get afflicted by the curse.
-
-Once entering the velothi tomb the difficulty will increase a lot, so the player might not be able to get rid of the curse by killing Grurn immediately and needs to deal with its effects.
-Throughout it the player is tasked with solving multiple puzzles or illusions in order to advance.
-A shade of Grurn (Strongly weakened version of Grurn) will randomly spawn throughout the dungeon and attack the party.
-The player can decide to never engage this threat without failing the quest.
-In one room Hyrondir will talk to the player, babbling paranoid nonsense and going insane. He will then attack the player and Mara Varius.
-A later room will have the player fight an illusionary copy of Mara Varius.
-The player is not aware of this and will only realize this after the room has left and Mara is still with them.
-Talking to her will reveal that she had no idea what is going on and will be concerned about you going insane too.
-
-Upon reaching the final room where Grurn resides the party is forced to fight.
-The player must find the phylactery (Stated in an optional note found in the ebony mine from a previous team sent to purge the undead) before being able to damage Grurn.
-The Ward of Akavir can be found within the room (?).
-Killing him will free the player and Mara Varius (If alive) of the curse and they can return to Sellus Gravius to complete the quest.
-
-Upon completing the quest Sellus Gravius places Mara Varius (If alive) under your command, making her a permanent companion.
-If the player has the rank of Knight Protector (7) within the legion Sellus Gravius will have an additional reward available: Rebuilding and managing Fort Firemoth and its ebony mine.
-
-Rebuilding the fort to its basic form will only consist of being informed that they cooperated with the EEC to shore up reconstruction costs and waiting a week (?).
-Once rebuilt the quest can be completed by talking to Sellus Gravius once more, referring you to Lexion Pontius inside the rebuilt Fort. The legion can't expend any more forces to protect the Fort so its up to the player to hire Mercenaries to do this.
-The player is now free to manage the fort and the ebony mine with the help of the EEC on the island as stated under the corresponding gameplay section.
-</details>
 
 ## Visuals
 
