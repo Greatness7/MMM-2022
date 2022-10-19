@@ -35,11 +35,6 @@
 
 The mod is an overhaul and expansion of the [Siege at Firemoth](https://en.uesp.net/wiki/Morrowind:Siege_at_Firemoth) plugin.
 
-It will consist of mainly two stages:
-
-1. An initial dungeon crawl, where the player is tasked with reclaiming the fort from the empire's enemies.
-2. A series of follow-up quests and activities that allow the player to assist in restoring the ruined fort.
-
 ## Story
 
 ### Characters
@@ -92,10 +87,6 @@ Bosmer archer who joins you on the expedition. Cocky, bored?
 
 Argonion archer. Sole living survivor of the original fort staff. Survived by hiding in the mines and living off mushrooms.
 
-#### Lexion Pontius
-
-A member of the EEC tasked with the rebuild and management of Fort Firemoth along with the player. Can be found inside the rebuilt Fort. Acts as a host for the Fort Management gameplay section.
-
 ## Quest
 
 Below is a rough bare-bones outline of the quest stages, and random related ideas/thoughts.
@@ -122,12 +113,6 @@ Below is a rough bare-bones outline of the quest stages, and random related idea
     * Maybe cinematic boss battle, or maybe somethign more exploation related. Many options.
 * The player returns to Sellus Gravius with the Ward of Akavir as proof of success.
     * Unlike the vanilla implementation, player gets to keep the artifact.
-* New quest line opens up to begin the process of rebuilding Fort Firemoth.
-    * Assets will be periodically swapped with repaired versions.
-    * New staff can be recruited to populate the fort. Potentially some freed slaves.
-    * Re-establish connections with the EEC to handle ebony trade.
-    * Rebuild the docks to allow new fast travel locations.
-    * Collect as many ideas as we can and implement the best ones!
 
 ## Visuals
 
@@ -157,7 +142,6 @@ Further details need to be filled in.
 
 ### Velothi Tomb
 
-* A branch of the nearby Sarys Ancestral Tomb.
 * Probably unearthed by Grurn to use as an additional resource of corpses.
 * (Idea) Some parts of the imperial set have collapsed and fallen into the velothi tombs halls. Fun and unusual tileset mixing.
 * (Idea) Utilize velothi spirits against the lich?
@@ -188,13 +172,5 @@ Potential ideas:
 * A player clone fight
 * Gas chambers
 * Chambers where the player needs to kill their companions.
-
-Further details need to be filled in.
-
-### Fort Management
-
-* Upon completing the quest the player can talk to Lexion Pontius to manage the fort.
-* Allow upgrading/changing various sets of furnite/banners etc. 
-* Manage Miners and Mercenaries used to extract/protect and ship the ebony.
 
 Further details need to be filled in.
