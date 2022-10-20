@@ -1,11 +1,10 @@
-// lua variables
-float fogCenters[] = {-10511.0, -71218.0, 196.0, -10511.0, -71218.0, 1024.0};
-float fogRadi[] = {64.0, 64.0, 128.0, 128.0, 128.0, 128.0};
-float fogColors[] = {0.2, 0.22, 0.28, 1.0, 0.0, 0.0};
-float fogDensities[] = {5.0, 10};
+static const float NUM_FOG_VOLUMES = 2;
 
-// precompute this when setting radius
-float fogScalar = 0.006; // 1.0 / sqrt(dot(fogRadius, fogRadius));;
+// lua variables
+float fogCenters[3*NUM_FOG_VOLUMES];
+float fogRadi[3*NUM_FOG_VOLUMES];
+float fogColors[3*NUM_FOG_VOLUMES];
+float fogDensities[NUM_FOG_VOLUMES];
 
 float3 eyepos;
 float4x4 mview;
@@ -103,27 +102,39 @@ float4 draw(float2 tex : TEXCOORD, float2 vpos : VPOS) : COLOR0 {
     float3 pos = eyepos;
     float3 dir = toWorld(tex);
 
-    for (int i = 0; i < 2; i++) {
-        float density = boxDensity(pos, dir, float3(fogCenters[i*3], fogCenters[i*3+1], fogCenters[i*3+2]), float3(fogRadi[i*3], fogRadi[i*3+1], fogRadi[i*3+2]), depth);
+    float3 center;
+    float3 radius;
+
+    // gamma -> linear
+    color = pow(color, 2.2);
+
+    // draw fog volumes
+    for (int i = 0; i < NUM_FOG_VOLUMES; i++) {
+        int x = i*3;
+        int y = x+1;
+        int z = y+1;
+
+        center = float3(fogCenters[x], fogCenters[y], fogCenters[z]);
+        radius = float3(fogRadi[x], fogRadi[y], fogRadi[z]);
+
+        float density = boxDensity(pos, dir, center, radius, depth);
         if (density > 0.0) {
             // apply lua config
+            float fogScalar = 1.0 / sqrt(dot(radius, radius));
             density = density * fogScalar * fogDensities[i];
 
-            // gamma -> linear
-            color = pow(color, 2.2);
-
-            // the actual fog stuff
-            float3 fogColor = float3(fogColors[i*3], fogColors[i*3+1], fogColors[i*3+2]);
+            // do the fog stuff
+            float3 fogColor = float3(fogColors[x], fogColors[y], fogColors[z]);
             color = lerp(fogColor * fogColor, color, exp(-0.5 * density));
-
-            // linear -> gamma
-            color = pow(color, 1/2.2);
-
-            // dithering!
-            float dithering = DITHERING[vpos.x % 4][vpos.y % 4];
-            color += dithering;
         }
     }
+
+    // linear -> gamma
+    color = pow(color, 1/2.2);
+
+    // dithering!
+    float dithering = DITHERING[vpos.x % 4][vpos.y % 4];
+    color += dithering;
 
     return float4(color, 1.0);
 }
