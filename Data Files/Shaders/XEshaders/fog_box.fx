@@ -1,9 +1,9 @@
 static const float NUM_FOG_VOLUMES = 2;
 
 // lua variables
-float fogCenters[3*NUM_FOG_VOLUMES];
-float fogRadi[3*NUM_FOG_VOLUMES];
-float fogColors[3*NUM_FOG_VOLUMES];
+float fogCenters[NUM_FOG_VOLUMES][3];
+float fogRadi[NUM_FOG_VOLUMES][3];
+float fogColors[NUM_FOG_VOLUMES][3];
 float fogDensities[NUM_FOG_VOLUMES];
 
 float3 eyepos;
@@ -102,20 +102,13 @@ float4 draw(float2 tex : TEXCOORD, float2 vpos : VPOS) : COLOR0 {
     float3 pos = eyepos;
     float3 dir = toWorld(tex);
 
-    float3 center;
-    float3 radius;
-
     // gamma -> linear
     color = pow(color, 2.2);
 
     // draw fog volumes
     for (int i = 0; i < NUM_FOG_VOLUMES; i++) {
-        int x = i*3;
-        int y = x+1;
-        int z = y+1;
-
-        center = float3(fogCenters[x], fogCenters[y], fogCenters[z]);
-        radius = float3(fogRadi[x], fogRadi[y], fogRadi[z]);
+        float3 center = float3(fogCenters[i]);
+        float3 radius = float3(fogRadi[i]);
 
         float density = boxDensity(pos, dir, center, radius, depth);
         if (density > 0.0) {
@@ -124,7 +117,7 @@ float4 draw(float2 tex : TEXCOORD, float2 vpos : VPOS) : COLOR0 {
             density = density * fogScalar * fogDensities[i];
 
             // do the fog stuff
-            float3 fogColor = float3(fogColors[x], fogColors[y], fogColors[z]);
+            float3 fogColor = float3(fogColors[i]);
             color = lerp(fogColor * fogColor, color, exp(-0.5 * density));
         }
     }
