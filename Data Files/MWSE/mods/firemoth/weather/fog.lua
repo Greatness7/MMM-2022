@@ -32,6 +32,7 @@ local activeFogVolumes = {}
 ---@field density number
 
 
+---@return number|nil
 local function getNextAvailableIndex()
     for i = 1, NUM_FOG_VOLUMES do
         if not activeFogVolumes[i] then
@@ -42,6 +43,7 @@ end
 
 
 ---@param id string
+---@return number|nil
 local function getFogVolumeIndex(id)
     local index = activeFogVolumes[id]
     return index or getNextAvailableIndex()
@@ -93,12 +95,14 @@ end
 ---@param id string
 function this.deleteFog(id)
     local index = getFogVolumeIndex(id)
-    setParamsForIndex(index, {
-        color = tes3vector3.new(),
-        center = tes3vector3.new(),
-        radius = tes3vector3.new(),
-        density = 0,
-    })
+    if index then
+        setParamsForIndex(index, {
+            color = tes3vector3.new(),
+            center = tes3vector3.new(),
+            radius = tes3vector3.new(),
+            density = 0,
+        })
+    end
 end
 
 
