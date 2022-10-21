@@ -7,8 +7,8 @@ local shader = assert(mge.shaders.load({ name = "fm_tonemap" }))
 shader.fogColor = tes3vector3.new(0.5, 0.0, 0.35)
 shader.enabled = false
 
-local exposure = -0.100
-local saturation = -0.200
+local exposure = -0.050
+local saturation = -0.100
 local defog = 0.1
 
 local function toggleShader(enabled)

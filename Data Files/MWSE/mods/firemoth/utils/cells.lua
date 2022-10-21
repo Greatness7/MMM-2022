@@ -2,7 +2,13 @@ local this = {}
 
 local XY = tes3vector3.new(1, 1, 0)
 
-this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(-57344, -77824, 0)
+local FIREMOTH_GRID_ORIGIN = tes3vector2.new(-8, -10)
+
+this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(
+    (FIREMOTH_GRID_ORIGIN.x + 0.5) * 8192,
+    (FIREMOTH_GRID_ORIGIN.y + 0.5) * 8192,
+    0
+)
 
 local INTERIORS = {
     ["Firemoth, Keep"] = true,
@@ -24,15 +30,15 @@ function this.isFiremothCell(cell)
         return INTERIORS[cell.name] or false
     end
 
-    -- Our exterior grid ranges from (-6, -8) to (-9, -12)
+    -- Our exterior grid ranges from (-7, -9) to (-9, -11)
 
     local x = cell.gridX
-    if (x > -6) or (x < -9) then
+    if (x > -7) or (x < -9) then
         return false
     end
 
     local y = cell.gridY
-    if (y > -8) or (y < -12) then
+    if (y > -9) or (y < -11) then
         return false
     end
 
