@@ -11,17 +11,15 @@ local this = {}
 ---@return mgeShaderHandle
 function this.createFog(t)
     local shader = mge.shaders.load({ name = "fog_box" })
-    if (shader) then
-        shader:reload()
-        shader.enabled = true
-        
-        shader.fogColors = t.colors
-        shader.fogCenters = t.centers
-        shader.fogRadi = t.radi
-        shader.fogDensities = t.densities
-        
-        return shader
-    end
+    shader:reload()
+    shader.enabled = true
+
+    shader.fogColors = t.colors
+    shader.fogCenters = t.centers
+    shader.fogRadi = t.radi
+    shader.fogDensities = t.densities
+
+    return shader
 end
 
 return this

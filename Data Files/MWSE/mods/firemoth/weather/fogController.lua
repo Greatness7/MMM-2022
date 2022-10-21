@@ -14,7 +14,9 @@ local function update(e)
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist
 
-    if math.min(currDist, prevDist) <= MAX_DISTANCE * 2
+    debug.log(utils.math.bellCurve(currDist, 15, 0, MAX_DISTANCE))
+
+    if math.min(currDist, prevDist) <= MAX_DISTANCE
         and not math.isclose(currDist, prevDist, 0.001)
     then
         fogShader.fogDensities[1] = utils.math.bellCurve(currDist, 15, 0, MAX_DISTANCE)
@@ -37,27 +39,30 @@ end
 local function loadFog()
     ---@type fogParams
     local fogParams = {
-        colors = { 0.07, 0.32, 0.35 },
-        centers = {
-            utils.cells.FIREMOTH_REGION_ORIGIN.x,
-            utils.cells.FIREMOTH_REGION_ORIGIN.y,
-            utils.cells.FIREMOTH_REGION_ORIGIN.z
+        colors = {
+            0.07, 0.32, 0.35,
+            0.0, 0.0, 0.0
         },
-        radi = { MAX_DISTANCE, MAX_DISTANCE, 128 },
-        densities = { 15 }
+        centers = {
+            utils.cells.FIREMOTH_REGION_ORIGIN.x, utils.cells.FIREMOTH_REGION_ORIGIN.y, utils.cells.FIREMOTH_REGION_ORIGIN.z,
+            0.0, 0.0, 0.0
+        },
+        radi = {
+            MAX_DISTANCE, MAX_DISTANCE, 128,
+            0.0, 0.0, 0.0
+        },
+        densities = {
+            15,
+            0
+        }
     }
     fogShader = fog.createFog(fogParams)
-
-    debug.log(json.encode(fogShader.fogColors))
-    debug.log(json.encode(fogShader.fogCenters))
-    debug.log(json.encode(fogShader.fogRadi))
-    debug.log(json.encode(fogShader.fogDensities))
 
     if (tes3.getPlayerCell().isInterior) then
         fogShader.enabled = false
     end
 
-    -- timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
+    timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
 end
 
 event.register(tes3.event.cellChanged, cellChangedCallback)
