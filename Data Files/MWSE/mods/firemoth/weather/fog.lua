@@ -102,6 +102,7 @@ function this.deleteFog(id)
             radius = tes3vector3.new(),
             density = 0,
         })
+        fogVolumes[id] = nil
     end
 end
 
