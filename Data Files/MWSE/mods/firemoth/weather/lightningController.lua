@@ -7,7 +7,7 @@ local DOWN = tes3vector3.new(0, 0, -1)
 local XY = tes3vector3.new(1, 1, 0)
 
 local STRIKE_DAMAGE = 20
-local STRIKE_MAX_RANGE = 8192 * 0.8 -- test values for easier visibility
+local STRIKE_MAX_RANGE = 8192 * 0.6 -- test values for easier visibility
 
 --- @return tes3vector3, boolean
 local function getStrikePos()
