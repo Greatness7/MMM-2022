@@ -70,13 +70,13 @@ end
 
 
 local function applyShaderParams()
-    local shader = mge.shaders.load({ name = "fog_box" })
-    if shader then
-        shader.enabled = true
-        shader.fogColors = fogVolumes.fogColors
-        shader.fogCenters = fogVolumes.fogCenters
-        shader.fogRadi = fogVolumes.fogRadi
-        shader.fogDensities = fogVolumes.fogDensities
+    this.shader = mge.shaders.load({ name = "fog_box" })
+    if this.shader then
+        this.shader.enabled = true
+        this.shader.fogColors = fogVolumes.fogColors
+        this.shader.fogCenters = fogVolumes.fogCenters
+        this.shader.fogRadi = fogVolumes.fogRadi
+        this.shader.fogDensities = fogVolumes.fogDensities
     end
 end
 
@@ -103,7 +103,26 @@ function this.deleteFog(id)
             density = 0,
         })
         fogVolumes[id] = nil
+        if not next(fogVolumes) then
+            this.shader.enabled = false
+        end
     end
+end
+
+
+function this.enable()
+    this.shader.enabled = true
+end
+
+
+function this.disable()
+    this.shader.enabled = false
+end
+
+
+---@return boolean
+function this.isEnabled()
+    return this.shader.enabled
 end
 
 

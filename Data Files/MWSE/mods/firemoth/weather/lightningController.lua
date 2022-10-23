@@ -9,6 +9,26 @@ local XY = tes3vector3.new(1, 1, 0)
 local STRIKE_DAMAGE = 20
 local STRIKE_MAX_RANGE = 8192 * 0.6 -- test values for easier visibility
 
+--- @return number
+local function nearestAntiMarkerDistance(strikePos)
+    ---@type number
+    local closestMarkerDistance
+
+    ---@param cell tes3cell
+    for _, cell in ipairs(tes3.getActiveCells()) do
+        ---@param reference tes3reference
+        for _, reference in cell:iterateReferences(tes3.objectType.static) do
+            if (reference.id == "fm_anti_strike") then
+                if (closestMarkerDistance == nil or utils.math.xyDistance(reference.position, strikePos) < closestMarkerDistance) then
+                    closestMarkerDistance = utils.math.xyDistance(reference.position, strikePos)
+                end
+            end
+        end
+    end
+
+    return closestMarkerDistance
+end
+
 --- @return tes3vector3, boolean
 local function getStrikePos()
     local x = STRIKE_MAX_RANGE * (math.random() * 2 - 1)
@@ -66,7 +86,13 @@ local function update()
     lastStrikeTime = os.clock()
 
     local strikePos, isWaterStrike = getStrikePos()
-    local strikeAoE = isWaterStrike and 2048 or 512
+    local strikeAoE = isWaterStrike and 3072 or 1024
+
+    local antiStrikePos = nearestAntiMarkerDistance(strikePos)
+
+    if (antiStrikePos <= 512) then
+        return
+    end
 
     -- target companions first
     for _, companion in ipairs(utils.cells.getNearbyCompanions()) do

@@ -24,8 +24,13 @@ local function update(e)
     if math.min(currDist, prevDist) <= MAX_DISTANCE
         and not math.isclose(currDist, prevDist, 0.001)
     then
+        if (fog.isEnabled() == false) then
+            fog.enable()
+        end
         fogParams.density = utils.math.bellCurve(currDist, 15, 0, MAX_DISTANCE)
         fog.updateFog(fogId, fogParams)
+    elseif (fog.isEnabled()) then
+        fog.disable()
     end
 
     e.timer.data.prevDist = currDist
@@ -43,6 +48,7 @@ event.register(tes3.event.cellChanged, cellChangedCallback)
 
 local function loadFog()
     fog.updateFog(fogId, fogParams)
+    fog.disable()
 
     if tes3.player.cell.isInterior then
         fog.deleteFog(fogId)
