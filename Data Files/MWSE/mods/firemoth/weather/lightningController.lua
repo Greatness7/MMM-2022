@@ -17,7 +17,7 @@ local function nearestAntiMarkerDistance(strikePos)
     ---@param cell tes3cell
     for _, cell in ipairs(tes3.getActiveCells()) do
         ---@param reference tes3reference
-        for _, reference in cell:iterateReferences(tes3.objectType.static) do
+        for reference in cell:iterateReferences(tes3.objectType.static) do
             if (reference.id == "fm_anti_strike") then
                 if (closestMarkerDistance == nil or utils.math.xyDistance(reference.position, strikePos) < closestMarkerDistance) then
                     closestMarkerDistance = utils.math.xyDistance(reference.position, strikePos)
@@ -90,7 +90,7 @@ local function update()
 
     local antiStrikePos = nearestAntiMarkerDistance(strikePos)
 
-    if (antiStrikePos <= 512) then
+    if (antiStrikePos ~= nil and antiStrikePos <= 512) then
         return
     end
 
