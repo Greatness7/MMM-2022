@@ -12,6 +12,9 @@ local TRIGGER_DISTANCE = 5 * 8192
 --- We interpolate from the weathers base color to this color, based on distance.
 local FIREMOTH_COLOR = tes3vector3.new(0.07, 0.32, 0.35)
 
+---@type mwseTimer
+local WEATHER_TIMER
+
 --- The color properties that will be modified.
 local MODIFIED_COLOR_PROPS = {
     "skySunriseColor",
@@ -124,6 +127,25 @@ local function update(e)
 
     e.timer.data.prevDist = currDist
 end
+
+event.register(tes3.event.weatherChangedImmediate, function ()
+    debug.log("immediate")
+    WEATHER_TIMER:pause()
+    timer.delayOneFrame(function ()
+        WEATHER_TIMER:resume()
+    end)
+end)
+
+event.register(tes3.event.weatherTransitionStarted, function ()
+    debug.log("started")
+    WEATHER_TIMER:pause()
+end)
+
+event.register(tes3.event.weatherTransitionFinished, function ()
+    debug.log("stopped")
+    WEATHER_TIMER:resume()
+end)
+
 event.register(tes3.event.loaded, function()
-    timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
+    WEATHER_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
 end)

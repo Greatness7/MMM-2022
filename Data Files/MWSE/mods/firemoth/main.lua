@@ -6,7 +6,7 @@
 event.register("initialized", function()
     if debug.log(tes3.isModActive("firemoth.esm")) then
         require("firemoth.weather.camera")
-        dofile("firemoth.weather.skyController")
+        -- dofile("firemoth.weather.skyController")
         dofile("firemoth.weather.lightningController")
         dofile("firemoth.weather.fogController")
         dofile("firemoth.shaders.tonemap")
