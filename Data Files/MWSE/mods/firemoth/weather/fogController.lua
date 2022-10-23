@@ -5,6 +5,9 @@ local MAX_DISTANCE = 8192 * 3
 
 local fogId = "Firemoth Exterior"
 
+---@type mwseTimer
+local FOG_TIMER
+
 ---@type fogParams
 local fogParams = {
     color = tes3vector3.new(0.07, 0.32, 0.35),
@@ -38,10 +41,11 @@ end
 
 --- @param e cellChangedEventData
 local function cellChangedCallback(e)
-    if e.cell.isInterior then
+    if (e.cell.isInterior or utils.cells.getFiremothDistance() > MAX_DISTANCE * 2) then
+        FOG_TIMER:pause()
         fog.deleteFog(fogId)
-    else
-        -- ?
+    elseif (utils.cells.getFiremothDistance() < MAX_DISTANCE * 2) then
+        FOG_TIMER:resume()
     end
 end
 event.register(tes3.event.cellChanged, cellChangedCallback)
@@ -54,6 +58,6 @@ local function loadFog()
         fog.deleteFog(fogId)
     end
 
-    timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
+    FOG_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
 end
 event.register(tes3.event.loaded, loadFog)

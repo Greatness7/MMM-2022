@@ -9,6 +9,9 @@ local XY = tes3vector3.new(1, 1, 0)
 local STRIKE_DAMAGE = 20
 local STRIKE_MAX_RANGE = 8192 * 0.6 -- test values for easier visibility
 
+---@type mwseTimer
+local STRIKE_TIMER
+
 --- @return number
 local function nearestAntiMarkerDistance(strikePos)
     ---@type number
@@ -118,8 +121,16 @@ local function update()
     -- tes3.messageBox("distance: %.2f | shake: %.2f", strikeDist, shakeStrength)
 end
 
+event.register(tes3.event.cellChanged, function (e)
+    if (e.cell.isInterior or utils.cells.getFiremothDistance() > MAX_DISTANCE * 2) then
+        STRIKE_TIMER:pause()
+    elseif (utils.cells.getFiremothDistance() <= MAX_DISTANCE * 2) then
+        STRIKE_TIMER:resume()
+    end
+end)
+
 event.register(tes3.event.loaded, function()
-    timer.start({
+    STRIKE_TIMER = timer.start({
         iterations = -1,
         duration = 0.25,
         callback = update,
