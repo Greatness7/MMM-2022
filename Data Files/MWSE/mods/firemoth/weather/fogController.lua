@@ -43,16 +43,8 @@ local function cellChangedCallback(e)
         FOG_TIMER:resume()
     end
 end
+
 event.register(tes3.event.cellChanged, cellChangedCallback)
-
-local function loadFog()
-    fog.createOrUpdateFog(fogId, fogParams)
-
-    FOG_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
-    
-    if (tes3.player.cell.isInterior or utils.cells.getFiremothDistance() > MAX_DISTANCE * 2) then
-        FOG_TIMER:pause()
-        fog.deleteFog(fogId)
-    end
-end
-event.register(tes3.event.loaded, loadFog)
+event.register(tes3.event.loaded, function ()
+    FOG_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update })
+end)
