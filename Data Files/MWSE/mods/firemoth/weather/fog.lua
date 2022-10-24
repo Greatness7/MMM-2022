@@ -1,6 +1,6 @@
 local this = {}
 
----@type mgeShaderHandle
+---@type mgeShaderHandle|nil
 local shader
 
 local NUM_FOG_VOLUMES = 2
