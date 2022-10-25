@@ -33,18 +33,24 @@ local function update(e)
 
     e.timer.data.prevDist = currDist
 end
+event.register(tes3.event.loaded, function()
+    FOG_TIMER = timer.start({
+        iterations = -1,
+        duration = 1 / 10,
+        callback = update,
+        data = {},
+    })
+end)
 
 --- @param e cellChangedEventData
 local function cellChangedCallback(e)
-    if (e.cell.isInterior or utils.cells.getFiremothDistance() > MAX_DISTANCE * 2) then
-        FOG_TIMER:pause()
+    local dist = utils.cells.getFiremothDistance()
+    if dist > MAX_DISTANCE or e.cell.isInterior then
         fog.deleteFog(fogId)
-    elseif (utils.cells.getFiremothDistance() < MAX_DISTANCE * 2) then
+        FOG_TIMER:pause()
+    else
+        fog.createOrUpdateFog(fogId, fogParams)
         FOG_TIMER:resume()
     end
 end
-
 event.register(tes3.event.cellChanged, cellChangedCallback)
-event.register(tes3.event.loaded, function ()
-    FOG_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update })
-end)

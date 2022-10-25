@@ -12,18 +12,18 @@ local STRIKE_MAX_RANGE = 8192 * 0.6 -- test values for easier visibility
 ---@type mwseTimer
 local STRIKE_TIMER
 
---- @return number
+---@param strikePos tes3vector3
+---@return number
 local function nearestAntiMarkerDistance(strikePos)
-    ---@type number
-    local closestMarkerDistance
+    local closestMarkerDistance = math.huge
 
-    ---@param cell tes3cell
     for _, cell in ipairs(tes3.getActiveCells()) do
-        ---@param reference tes3reference
-        for reference in cell:iterateReferences(tes3.objectType.static) do
-            if (reference.id == "fm_anti_strike") then
-                if (closestMarkerDistance == nil or utils.math.xyDistance(reference.position, strikePos) < closestMarkerDistance) then
-                    closestMarkerDistance = utils.math.xyDistance(reference.position, strikePos)
+        for ref in cell:iterateReferences(tes3.objectType.static) do
+            ---@cast ref tes3reference
+            if ref.id == "fm_anti_strike" then
+                local dist = utils.math.xyDistance(ref.position, strikePos)
+                if dist < closestMarkerDistance then
+                    closestMarkerDistance = dist
                 end
             end
         end
@@ -32,7 +32,7 @@ local function nearestAntiMarkerDistance(strikePos)
     return closestMarkerDistance
 end
 
---- @return tes3vector3, boolean
+---@return tes3vector3, boolean
 local function getStrikePos()
     local x = STRIKE_MAX_RANGE * (math.random() * 2 - 1)
     local y = STRIKE_MAX_RANGE * (math.random() * 2 - 1)
@@ -91,9 +91,9 @@ local function update()
     local strikePos, isWaterStrike = getStrikePos()
     local strikeAoE = isWaterStrike and 3072 or 1024
 
-    local antiStrikePos = nearestAntiMarkerDistance(strikePos)
-
-    if (antiStrikePos ~= nil and antiStrikePos <= 512) then
+    -- discourage strikes near anti-strike markers
+    -- TODO: only do this during appropriate quest
+    if nearestAntiMarkerDistance(strikePos) <= 512 then
         return
     end
 
@@ -121,10 +121,11 @@ local function update()
     -- tes3.messageBox("distance: %.2f | shake: %.2f", strikeDist, shakeStrength)
 end
 
-event.register(tes3.event.cellChanged, function (e)
-    if (e.cell.isInterior or utils.cells.getFiremothDistance() > MAX_DISTANCE * 2) then
+event.register(tes3.event.cellChanged, function(e)
+    local dist = utils.cells.getFiremothDistance()
+    if (dist > MAX_DISTANCE) or e.cell.isInterior then
         STRIKE_TIMER:pause()
-    elseif (utils.cells.getFiremothDistance() <= MAX_DISTANCE * 2) then
+    else
         STRIKE_TIMER:resume()
     end
 end)
