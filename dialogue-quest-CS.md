@@ -62,6 +62,32 @@
 
 > You have my axe.
 
+### Mara
+
+#### Before Accepting
+
+> [Mara gives you a look of disgust, saying nothing.]
+
+> [Mara won't even look at you.]
+
+#### After Accepting
+
+> Well, well, well. Our motley crew finally finds a motley chief. You seem competent enough, we’ll soon find out, won’t we?
+
+> Shall we press on?
+
+#### Arriving on Island
+
+> There’s so many of them, this will be like shooting hagfish in a barrel. I just hope I brought enough arrows, I admit.
+
+> [Mara has a bloodlust in her eyes.]
+
+#### Regroup
+
+> I must admit I'm glad to see you. Let's end this.
+
+> [Mara looks determined.]
+
 ## Journal
 
 |ID|Entry|
