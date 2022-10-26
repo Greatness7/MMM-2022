@@ -38,7 +38,7 @@ local activeFogVolumes = {}
 ---@return number|nil
 local function getNextAvailableIndex()
     for i = 1, NUM_FOG_VOLUMES do
-        if not activeFogVolumes[i] then
+        if not table.find(activeFogVolumes, i) then
             return i
         end
     end
@@ -56,17 +56,21 @@ end
 ---@param i number
 ---@param params fogParams
 local function setParamsForIndex(i, params)
-    fogVolumes.fogCenters[i] = params.center.x
-    fogVolumes.fogCenters[i + 1] = params.center.y
-    fogVolumes.fogCenters[i + 2] = params.center.z
+    local x = (i * 3) - 2
+    local y = x + 1
+    local z = y + 1
 
-    fogVolumes.fogRadi[i] = params.radius.x
-    fogVolumes.fogRadi[i + 1] = params.radius.y
-    fogVolumes.fogRadi[i + 2] = params.radius.z
+    fogVolumes.fogCenters[x] = params.center.x
+    fogVolumes.fogCenters[y] = params.center.y
+    fogVolumes.fogCenters[z] = params.center.z
 
-    fogVolumes.fogColors[i] = params.color.x
-    fogVolumes.fogColors[i + 1] = params.color.y
-    fogVolumes.fogColors[i + 2] = params.color.z
+    fogVolumes.fogRadi[x] = params.radius.x
+    fogVolumes.fogRadi[y] = params.radius.y
+    fogVolumes.fogRadi[z] = params.radius.z
+
+    fogVolumes.fogColors[x] = params.color.x
+    fogVolumes.fogColors[y] = params.color.y
+    fogVolumes.fogColors[z] = params.color.z
 
     fogVolumes.fogDensities[i] = params.density
 end
@@ -90,9 +94,8 @@ function this.createOrUpdateFog(id, params)
     if index then
         setParamsForIndex(index, params)
         applyShaderParams()
-        if next(fogVolumes) then
-            shader.enabled = true
-        end
+        activeFogVolumes[id] = index
+        shader.enabled = true
     end
 end
 
@@ -107,8 +110,8 @@ function this.deleteFog(id)
             radius = tes3vector3.new(),
             density = 0,
         })
-        fogVolumes[id] = nil
         applyShaderParams()
+        fogVolumes[id] = nil
         if not next(fogVolumes) then
             shader.enabled = false
         end
