@@ -5,12 +5,20 @@ local MAX_SKELETONS = 12
 local MAX_SPAWN_DISTANCE = 2048
 
 local SKELETON_OBJECTS = {
-    ["fm_skeleton_1"] = --[[Anim Duration]] 7.7,
-    ["fm_skeleton_2"] = --[[Anim Duration]] 6.2,
+    [tes3.getObject("fm_skeleton_1")] = --[[Anim Duration]] 7.7,
+    [tes3.getObject("fm_skeleton_2")] = --[[Anim Duration]] 6.2,
 }
 
 local SKELETON_SPAWNERS = {
-    ["fm_skeleton_spawner"] = true,
+    [tes3.getObject("fm_skeleton_spawner")] = true,
+}
+
+local SKELETON_SOUNDS = {
+    [tes3.getSound("tew_fm_skelerise")] = true,
+}
+
+local SKELETON_VFX = {
+    [tes3.getObject("fm_skeleton_rising_vfx")] = true,
 }
 
 ---@type table<tes3reference, boolean>
@@ -21,6 +29,10 @@ local skeletons = {}
 
 ---@type mwseTimer
 local spawnTimer = nil
+
+local randomSkeletonObject = utils.math.nonRepeatTableRNG(table.keys(SKELETON_OBJECTS))
+local randomSkeletonSound = utils.math.nonRepeatTableRNG(table.keys(SKELETON_SOUNDS))
+local randomSkeletonVFX = utils.math.nonRepeatTableRNG(table.keys(SKELETON_VFX))
 
 
 local function availableSpawners(timestamp)
@@ -71,10 +83,9 @@ local function getFarthestSkeleton()
 end
 
 
-local randomSkeletonId = utils.math.nonRepeatTableRNG(table.keys(SKELETON_OBJECTS))
 local function spawnSkeleton()
     local timestamp = tes3.getSimulationTimestamp()
-    local spawner = getClosestAvailableSpawner(timestamp)
+    local spawner, distance = getClosestAvailableSpawner(timestamp)
     if not spawner then
         return
     end
@@ -82,8 +93,8 @@ local function spawnSkeleton()
     -- If we're at the max number of skeletons then 'respawn' the farthest one.
     -- Otherwise player can just spawn all skeletons on an island and ditch it.
     if table.size(skeletons) >= MAX_SKELETONS then
-        local skeleton, distance = getFarthestSkeleton()
-        if distance <= 1024 then
+        local skeleton, dist = getFarthestSkeleton()
+        if dist <= 1024 then
             return
         end
         skeleton:disable()
@@ -91,7 +102,7 @@ local function spawnSkeleton()
     end
 
     local skeleton = tes3.createReference({
-        object = randomSkeletonId(),
+        object = randomSkeletonObject(),
         position = spawner.position,
         cell = spawner.cell,
     })
@@ -106,13 +117,20 @@ local function spawnSkeleton()
     })
 
     tes3.playSound({
-        sound = "tew_fm_skelerise",
+        sound = randomSkeletonSound(),
         reference = skeleton,
+        mixChannel = tes3.soundMix.master,
         volume = 1.0,
     })
 
+    tes3.createVisualEffect({
+        object = randomSkeletonVFX(),
+        lifespan = 20.0,
+        position = skeleton.position,
+    })
+
     -- Workaround for skeletons turning during animation playback. Yuck.
-    local animDuration = SKELETON_OBJECTS[skeleton.baseObject.id]
+    local animDuration = assert(SKELETON_OBJECTS[skeleton.baseObject])
     tes3.applyMagicSource({
         reference = skeleton,
         bypassResistances = true,
@@ -149,12 +167,12 @@ local function onReferenceCreated(e)
         return
     end
 
-    if SKELETON_SPAWNERS[object.id] then
+    if SKELETON_SPAWNERS[object] then
         spawners[e.reference] = true
         return
     end
 
-    if SKELETON_OBJECTS[object.id] then
+    if SKELETON_OBJECTS[object] then
         skeletons[e.reference] = true
         return
     end
