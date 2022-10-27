@@ -26,7 +26,9 @@ local INTERIORS = {
 --- @param cell tes3cell
 --- @returns boolean
 function this.isFiremothCell(cell)
-    if cell.isInterior then
+    if cell == nil then
+        return false
+    elseif cell.isInterior then
         return INTERIORS[cell.name] or false
     end
 
