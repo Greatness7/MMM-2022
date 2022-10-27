@@ -48,7 +48,7 @@ end
 
 
 local function getClosestAvailableSpawner(timestamp)
-    local position = tes3.player.position + (tes3.player.forwardDirection * 768)
+    local position = tes3.getPlayerEyePosition() + tes3.getPlayerEyeVector() * 256
 
     local closestSpawner = nil
     local distance = MAX_SPAWN_DISTANCE
@@ -85,7 +85,7 @@ end
 
 local function spawnSkeleton()
     local timestamp = tes3.getSimulationTimestamp()
-    local spawner, distance = getClosestAvailableSpawner(timestamp)
+    local spawner = getClosestAvailableSpawner(timestamp)
     if not spawner then
         return
     end
@@ -93,8 +93,8 @@ local function spawnSkeleton()
     -- If we're at the max number of skeletons then 'respawn' the farthest one.
     -- Otherwise player can just spawn all skeletons on an island and ditch it.
     if table.size(skeletons) >= MAX_SKELETONS then
-        local skeleton, dist = getFarthestSkeleton()
-        if dist <= 1024 then
+        local skeleton, distance = getFarthestSkeleton()
+        if distance <= 1024 then
             return
         end
         skeleton:disable()
@@ -144,6 +144,22 @@ end
 event.register(tes3.event.loaded, function()
     spawnTimer = timer.start({ iterations = -1, duration = 1.0, callback = spawnSkeleton })
     spawnTimer:pause()
+
+    do
+        -- Fix skeletons that were in the middle of animation when save/reload.
+        -- No time to make a proper fix unfortunately.
+        for _, cell in pairs(tes3.getActiveCells()) do
+            for ref in cell:iterateReferences(tes3.objectType.creature) do
+                if SKELETON_OBJECTS[ref.baseObject] then
+                    if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
+                        tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
+                        tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
+                        skeletons[ref] = true
+                    end
+                end
+            end
+        end
+    end
 end)
 
 
