@@ -79,24 +79,22 @@ local function spawnSkeleton()
         return
     end
 
-    local skeleton, distance
-
     -- If we're at the max number of skeletons then 'respawn' the farthest one.
     -- Otherwise player can just spawn all skeletons on an island and ditch it.
     if table.size(skeletons) >= MAX_SKELETONS then
-        skeleton, distance = getFarthestSkeleton()
+        local skeleton, distance = getFarthestSkeleton()
         if distance <= 1024 then
             return
         end
+        skeleton:disable()
+        skeleton:delete()
     end
 
-    if skeleton == nil then
-        skeleton = tes3.createReference({
-            object = randomSkeletonId(),
-            position = spawner.position,
-            cell = spawner.cell,
-        })
-    end
+    local skeleton = tes3.createReference({
+        object = randomSkeletonId(),
+        position = spawner.position,
+        cell = spawner.cell,
+    })
 
     skeleton.position = spawner.position
     skeleton.orientation.z = math.rad(math.random(360))
