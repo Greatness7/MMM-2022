@@ -5,12 +5,20 @@ local MAX_SKELETONS = 12
 local MAX_SPAWN_DISTANCE = 2048
 
 local SKELETON_OBJECTS = {
-    ["fm_skeleton_1"] = --[[Anim Duration]] 7.7,
-    ["fm_skeleton_2"] = --[[Anim Duration]] 6.2,
+    [tes3.getObject("fm_skeleton_1")] = --[[Anim Duration]] 7.7,
+    [tes3.getObject("fm_skeleton_2")] = --[[Anim Duration]] 6.2,
 }
 
 local SKELETON_SPAWNERS = {
-    ["fm_skeleton_spawner"] = true,
+    [tes3.getObject("fm_skeleton_spawner")] = true,
+}
+
+local SKELETON_SOUNDS = {
+    [tes3.getSound("tew_fm_skelerise")] = true,
+}
+
+local SKELETON_VFX = {
+    [tes3.getObject("fm_skeleton_rising_vfx")] = true,
 }
 
 ---@type table<tes3reference, boolean>
@@ -21,6 +29,10 @@ local skeletons = {}
 
 ---@type mwseTimer
 local spawnTimer = nil
+
+local randomSkeletonObject = utils.math.nonRepeatTableRNG(table.keys(SKELETON_OBJECTS))
+local randomSkeletonSound = utils.math.nonRepeatTableRNG(table.keys(SKELETON_SOUNDS))
+local randomSkeletonVFX = utils.math.nonRepeatTableRNG(table.keys(SKELETON_VFX))
 
 
 local function availableSpawners(timestamp)
@@ -36,7 +48,7 @@ end
 
 
 local function getClosestAvailableSpawner(timestamp)
-    local position = tes3.player.position + (tes3.player.forwardDirection * 768)
+    local position = tes3.getPlayerEyePosition() + tes3.getPlayerEyeVector() * 256
 
     local closestSpawner = nil
     local distance = MAX_SPAWN_DISTANCE
@@ -71,7 +83,6 @@ local function getFarthestSkeleton()
 end
 
 
-local randomSkeletonId = utils.math.nonRepeatTableRNG(table.keys(SKELETON_OBJECTS))
 local function spawnSkeleton()
     local timestamp = tes3.getSimulationTimestamp()
     local spawner = getClosestAvailableSpawner(timestamp)
@@ -91,7 +102,7 @@ local function spawnSkeleton()
     end
 
     local skeleton = tes3.createReference({
-        object = randomSkeletonId(),
+        object = randomSkeletonObject(),
         position = spawner.position,
         cell = spawner.cell,
     })
@@ -106,13 +117,20 @@ local function spawnSkeleton()
     })
 
     tes3.playSound({
-        sound = "tew_fm_skelerise",
+        sound = randomSkeletonSound(),
         reference = skeleton,
+        mixChannel = tes3.soundMix.master,
         volume = 1.0,
     })
 
+    tes3.createVisualEffect({
+        object = randomSkeletonVFX(),
+        lifespan = 20.0,
+        position = skeleton.position,
+    })
+
     -- Workaround for skeletons turning during animation playback. Yuck.
-    local animDuration = SKELETON_OBJECTS[skeleton.baseObject.id]
+    local animDuration = assert(SKELETON_OBJECTS[skeleton.baseObject])
     tes3.applyMagicSource({
         reference = skeleton,
         bypassResistances = true,
@@ -126,6 +144,22 @@ end
 event.register(tes3.event.loaded, function()
     spawnTimer = timer.start({ iterations = -1, duration = 1.0, callback = spawnSkeleton })
     spawnTimer:pause()
+
+    do
+        -- Fix skeletons that were in the middle of animation when save/reload.
+        -- No time to make a proper fix unfortunately.
+        for _, cell in pairs(tes3.getActiveCells()) do
+            for ref in cell:iterateReferences(tes3.objectType.creature) do
+                if SKELETON_OBJECTS[ref.baseObject] then
+                    if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
+                        tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
+                        tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
+                        skeletons[ref] = true
+                    end
+                end
+            end
+        end
+    end
 end)
 
 
@@ -149,12 +183,12 @@ local function onReferenceCreated(e)
         return
     end
 
-    if SKELETON_SPAWNERS[object.id] then
+    if SKELETON_SPAWNERS[object] then
         spawners[e.reference] = true
         return
     end
 
-    if SKELETON_OBJECTS[object.id] then
+    if SKELETON_OBJECTS[object] then
         skeletons[e.reference] = true
         return
     end
