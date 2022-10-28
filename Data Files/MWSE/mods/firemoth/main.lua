@@ -17,6 +17,7 @@ event.register("initialized", function()
         dofile("firemoth.puzzles.skeletonSpawner")
         -- dofile("firemoth.puzzles.secretWall")
         dofile("firemoth.testing")
+        dofile("firemoth.npcs.seydaNeen")
     end
 end)
 

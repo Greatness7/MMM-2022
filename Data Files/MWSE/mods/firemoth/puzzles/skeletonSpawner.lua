@@ -83,6 +83,23 @@ local function getFarthestSkeleton()
 end
 
 
+local function fixSkeletonsHack()
+    -- Fix skeletons that were in the middle of animation when save/reload.
+    -- No time to make a proper fix unfortunately.
+    for _, cell in pairs(tes3.getActiveCells()) do
+        for ref in cell:iterateReferences(tes3.objectType.creature) do
+            if SKELETON_OBJECTS[ref.baseObject] then
+                if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
+                    tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
+                    tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
+                    skeletons[ref] = true
+                end
+            end
+        end
+    end
+end
+
+
 local function spawnSkeleton()
     local timestamp = tes3.getSimulationTimestamp()
     local spawner = getClosestAvailableSpawner(timestamp)
@@ -144,22 +161,7 @@ end
 event.register(tes3.event.loaded, function()
     spawnTimer = timer.start({ iterations = -1, duration = 1.0, callback = spawnSkeleton })
     spawnTimer:pause()
-
-    do
-        -- Fix skeletons that were in the middle of animation when save/reload.
-        -- No time to make a proper fix unfortunately.
-        for _, cell in pairs(tes3.getActiveCells()) do
-            for ref in cell:iterateReferences(tes3.objectType.creature) do
-                if SKELETON_OBJECTS[ref.baseObject] then
-                    if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
-                        tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
-                        tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
-                        skeletons[ref] = true
-                    end
-                end
-            end
-        end
-    end
+    fixSkeletonsHack()
 end)
 
 
@@ -176,7 +178,7 @@ end
 event.register(tes3.event.cellChanged, enteredFiremoth)
 
 
----@param e referenceActivatedEventData
+---@param e referenceActivatedEventData|mobileActivatedEventData
 local function onReferenceCreated(e)
     local object = e.reference.baseObject
     if object == nil then
@@ -193,6 +195,7 @@ local function onReferenceCreated(e)
         return
     end
 end
+event.register(tes3.event.mobileActivated, onReferenceCreated)
 event.register(tes3.event.referenceActivated, onReferenceCreated)
 
 
