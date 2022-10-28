@@ -1,151 +1,72 @@
---[[
-    Controls how weather updates as you approach or leave Firemoth.
---]]
-
-local utils = require("firemoth.utils")
-
---- Distance at which the controller is triggered
---- If player is beyond this distance nothing happens.
-local TRIGGER_DISTANCE = 5 * 8192
-
---- The final color that we transition toward.
---- We interpolate from the weathers base color to this color, based on distance.
-local FIREMOTH_COLOR = tes3vector3.new(0.07, 0.32, 0.35)
-
----@type mwseTimer
-local WEATHER_TIMER
-
---- The color properties that will be modified.
-local MODIFIED_COLOR_PROPS = {
-    "skySunriseColor",
-    "skyDayColor",
-    "skySunsetColor",
-    "skyNightColor",
-    "fogSunriseColor",
-    "fogDayColor",
-    "fogSunsetColor",
-    "fogNightColor",
-    "ambientSunriseColor",
-    "ambientDayColor",
-    "ambientSunsetColor",
-    "ambientNightColor",
-    "sunSunriseColor",
-    "sunDayColor",
-    "sunSunsetColor",
-    "sunNightColor",
-    "sundiscSunsetColor",
+-- World controller does not exist at this point, so we need hardcoded values
+local weathers = {
+    ["Clear"] = "Data Files\\Textures\\tx_sky_clear.tga",
+    ["Cloudy"] = "Data Files\\Textures\\tx_sky_cloudy.tga",
+    ["Foggy"] = "Data Files\\Textures\\tx_sky_foggy.tga",
+    ["Overcast"] = "Data Files\\Textures\\tx_sky_overcast.tga",
+    ["Rain"] = "Data Files\\Textures\\tx_sky_rainy.tga",
+    ["Thunderstorm"] = "Data Files\\Textures\\tx_sky_thunder.tga",
+    ["Ashstorm"] = "Data Files\\Textures\\tx_sky_ashstorm.tga",
+    ["Blight"] = "Data Files\\Textures\\tx_sky_blight.tga",
+    ["Snow"] = "Data Files\\Textures\\tx_bm_sky_snow.tga",
+    ["Blizzard"] = "Data Files\\Textures\\tx_mb_sky_blizzard.tga"
 }
 
---- @alias WeatherIndex number
---- @alias WeatherColors table<string, tes3vector3>
---- @alias WeatherColorsCache table<WeatherIndex, WeatherColors>
---- @type WeatherColorsCache
-local WEATHER_COLORS_CACHE = {}
+-- That's what we're injecting into WA preset
+local FIREMOTH_COLORS = {
+    ["sunDayColor"] = {0.0065038478933275,0,0.00011165376054123},
+    ["skySunsetColor"] = {0.1336452960968,0.14406704902649,0.13454793393612},
+    ["fogSunsetColor"] = {0.2110009342432,0.31292769312859,0.25061112642288},
+    ["fogDayColor"] = {0.23149907588959,0.3573169708252,0.22385853528976},
+    ["skyNightColor"] = {0.042677965015173,0.090360872447491,0.021249016746879},
+    ["fogSunriseColor"] = {0.21693943440914,0.26637265086174,0.1815433204174},
+    ["ambientSunsetColor"] = {0.21177193522453,0.21176420152187,0.21174873411655},
+    ["skyDayColor"] = {0.30822730064392,0.37651205062866,0.24763210117817},
+    ["ambientDayColor"] = {0.30253541469574,0.30499342083931,0.21232399344444},
+    ["sunNightColor"] = {0,0.00067067012423649,0},
+    ["ambientNightColor"] = {0.16496916115284,0.21193534135818,0.1555439978838},
+    ["sunSunsetColor"] = {0,0.00056773476535454,0},
+    ["sundiscSunsetColor"] = {0.50196081399918,0.50196081399918,0.50196081399918},
+    ["sunSunriseColor"] = {0,0.00070873933145776,0},
+    ["ambientSunriseColor"] = {0.21178226172924,0.21176178753376,0.21174223721027},
+    ["fogNightColor"] = {0.036167379468679,0.090743027627468,0.033697858452797},
+    ["skySunriseColor"] = {0.13739524781704,0.1690034866333,0.10228496044874}
+}
+local FIREMOTH_OUTSCATTER = {0.07,0.36,0.76}
+local FIREMOTH_INSCATTER = {0.25,0.38,0.48}
 
-
---- @return WeatherColorsCache
-local function getCachedWeatherColors()
-    local weather = tes3.getCurrentWeather()
-
-    --- @type WeatherColorsCache
-    local cache = WEATHER_COLORS_CACHE
-
-    -- store current colors so they can be restored when leaving Firemoth
-    if not cache[weather.index] then
-        local colors = {}
-        for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
-            colors[prop] = weather[prop]:copy()
+local function overridePreset()
+    local preset = mwse.loadConfig("Weather Adjuster")
+    mwse.saveConfig("Weather Adjuster_backup", preset)
+    if preset then
+        preset.presets["CC_Firemoth"] = {}
+        for name, tex in pairs(weathers) do
+            preset.presets["CC_Firemoth"][name] = FIREMOTH_COLORS
+            preset.presets["CC_Firemoth"][name]["cloudTexture"] = tex
         end
-        cache[weather.index] = colors
-    end
-
-    return cache
-end
-
---- @param weather tes3weather
---- @param colors WeatherColors
-local function resetWeatherColors(weather, colors)
-    for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
-        local color = colors[prop]
-        weather[prop].r = color.r
-        weather[prop].g = color.g
-        weather[prop].b = color.b
+        preset.presets["CC_Firemoth"].outscatter = FIREMOTH_OUTSCATTER
+        preset.presets["CC_Firemoth"].inscatter = FIREMOTH_INSCATTER
+        preset.regions["Firemoth Region"] = "CC_Firemoth"
+        mwse.saveConfig("Weather Adjuster", preset)
     end
 end
 
---- @param weather tes3weather
---- @param colors WeatherColors
---- @param scalar number
-local function interpWeatherColors(weather, colors, scalar)
-    for _, prop in ipairs(MODIFIED_COLOR_PROPS) do
-        local color = colors[prop]:lerp(FIREMOTH_COLOR, scalar)
-        weather[prop].r = color.r
-        weather[prop].g = color.g
-        weather[prop].b = color.b
+local function restorePreset()
+    local preset = mwse.loadConfig("Weather Adjuster_backup")
+    if preset then
+        mwse.saveConfig("Weather Adjuster", preset)
     end
 end
 
---- @param distance number
-local function updateWeatherColors(distance)
-    local curve = utils.math.bellCurve(distance, 1, 0, TRIGGER_DISTANCE)
+local function rebindExitButton(e)
+	-- Try to find the options menu exit button.
+	local exitButton = e.element:findChild(tes3ui.registerID("MenuOptions_Exit_container"))
+	if (exitButton == nil) then return end
 
-    local wc = tes3.worldController.weatherController
-    local currentIndex = wc.currentWeather.index
-    local weathers = wc.weathers
-
-    local cache = getCachedWeatherColors()
-
-    for index, colors in pairs(cache) do
-        local weather = weathers[index]
-        if index == currentIndex then
-            interpWeatherColors(weather, colors, curve)
-        else
-            resetWeatherColors(weather, colors)
-            cache[index] = nil
-        end
-    end
-
-    wc:updateVisuals()
+	-- Set our new event handler.
+	exitButton:registerAfter("mouseClick", restorePreset)
 end
+event.register("uiCreated", rebindExitButton, { filter = "MenuOptions" })
 
-local function update(e)
-    -- TODO: we probably want some static color overrides in interiors.
-    if tes3.player.cell.isInterior then
-        return
-    end
 
-    local currDist = utils.cells.getFiremothDistance()
-    local prevDist = e.timer.data.prevDist or currDist
-
-    -- are we within the trigger distance
-    -- and has the distance been modified
-    if math.min(currDist, prevDist) <= TRIGGER_DISTANCE
-        and not math.isclose(currDist, prevDist, 0.001)
-    then
-        updateWeatherColors(currDist)
-    end
-
-    e.timer.data.prevDist = currDist
-end
-
-event.register(tes3.event.weatherChangedImmediate, function ()
-    debug.log("immediate")
-    WEATHER_TIMER:pause()
-    timer.delayOneFrame(function ()
-        WEATHER_TIMER:resume()
-    end)
-end)
-
-event.register(tes3.event.weatherTransitionStarted, function ()
-    debug.log("started")
-    WEATHER_TIMER:pause()
-end)
-
-event.register(tes3.event.weatherTransitionFinished, function ()
-    debug.log("stopped")
-    WEATHER_TIMER:resume()
-end)
-
-event.register(tes3.event.loaded, function()
-    WEATHER_TIMER = timer.start({ iterations = -1, duration = 1 / 10, callback = update, data = {} })
-end)
+overridePreset()
