@@ -17,8 +17,10 @@ event.register("initialized", function()
         dofile("firemoth.sounds.controller")
         dofile("firemoth.puzzles.infiniteCorners")
         dofile("firemoth.puzzles.alternatingStairs")
+        dofile("firemoth.puzzles.skeletonSpawner")
         -- dofile("firemoth.puzzles.secretWall")
         dofile("firemoth.testing")
+        dofile("firemoth.npcs.seydaNeen")
     end
 end)
 
