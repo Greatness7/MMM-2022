@@ -11,12 +11,6 @@ end)
 event.register("firemoth:travelAccepted", function()
     tes3ui.leaveMenuMode()
 
-    -- Advance time to dark hours.
-    local darkHour = 12 + 9 -- 9pm
-    local hour = tes3.worldController.hour.value
-    if hour > darkHour then hour = hour + 24 end
-    tes3.advanceTime({ hours = darkHour - hour })
-
     -- Disable skeleton spawning until NPCs are ready.
     tes3.player.data.fm_skeletonSpawnerDisabled = true
 
