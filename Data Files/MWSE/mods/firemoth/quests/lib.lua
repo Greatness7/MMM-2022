@@ -1,20 +1,17 @@
-local this = {}
+local this = {
+    id = "fm_2022",
+}
 
----@type table<string, tes3reference>
-this.npcs = {} -- set in loaded event
-
----@type table<string, tes3reference>
-this.clutter = {} -- set in loaded event
-
-local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue("fm_2022"))
+local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue(this.id))
 
 --[[
     Quest Events
 --]]
 
 local events = {
-    [-1] = "firemoth:QuestReset",
-    [200] = "firemoth:QuestAccepted",
+    [-1] = "firemoth:questReset",
+    [200] = "firemoth:questAccepted",
+    [250] = "firemoth:beginTraveling",
 }
 
 ---@param e journalEventData
@@ -24,6 +21,16 @@ local function onJournalUpdated(e)
     end
 end
 event.register(tes3.event.journal, onJournalUpdated)
+
+--[[
+    Quest Persistent References
+--]]
+
+---@type table<string, tes3reference>
+this.npcs = {} -- set in loaded event
+
+---@type table<string, tes3reference>
+this.clutter = {} -- set in loaded event
 
 local function onLoaded()
     this.npcs.mara = assert(tes3.getReference("fm_mara"))

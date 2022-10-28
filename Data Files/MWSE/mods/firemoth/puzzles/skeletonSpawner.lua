@@ -102,6 +102,10 @@ end
 
 local function spawnSkeleton()
     local timestamp = tes3.getSimulationTimestamp()
+    if tes3.player.data.fm_skeletonSpawnerDisabled then
+        return
+    end
+
     local spawner = getClosestAvailableSpawner(timestamp)
     if not spawner then
         return
