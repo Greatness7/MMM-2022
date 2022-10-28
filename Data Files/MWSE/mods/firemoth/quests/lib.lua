@@ -11,7 +11,7 @@ local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue(this.id))
 local events = {
     [-1] = "firemoth:questReset",
     [200] = "firemoth:questAccepted",
-    [250] = "firemoth:beginTraveling",
+    [300] = "firemoth:travelAccepted",
 }
 
 ---@param e journalEventData
