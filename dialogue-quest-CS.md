@@ -88,6 +88,16 @@
 
 > [Mara looks determined.]
 
+### Gravius
+
+#### Return with Shield
+
+> You've returned in one piece, impressive. I can't thank you enough for what you've done, the Empire thanks you. You can keep the [WARD], you've earned it. And here's some gold for your troubles.
+
+#### Return without Shield
+
+> You've returned in one piece, impressive. I can't thank you enough for what you've done, the Empire thanks you. And here's some gold for your troubles.
+
 ## Journal
 
 |ID|Entry|
