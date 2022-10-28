@@ -10,26 +10,13 @@ this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(
     0
 )
 
-local INTERIORS = {
-    ["Firemoth, Keep"] = true,
-    ["Firemoth, Great Hall"] = true,
-    ["Firemoth, Upper Chambers"] = true,
-    ["Firemoth, Guard Quarters"] = true,
-    ["Firemoth, Dungeon"] = true,
-    ["Firemoth, Lower Cavern"] = true,
-    ["Firemoth, Tomb"] = true,
-    ["Firemoth, Guard Towers"] = true,
-    ["Firemoth, Upper Cavern"] = true,
-    ["Firemoth, Mine"] = true,
-}
-
 --- @param cell tes3cell
 --- @returns boolean
 function this.isFiremothCell(cell)
     if cell == nil then
         return false
     elseif cell.isInterior then
-        return INTERIORS[cell.name] or false
+        return string.startswith(cell.name, "Firemoth") or false
     end
 
     -- Our exterior grid ranges from (-7, -9) to (-9, -11)
@@ -63,7 +50,7 @@ end
 function this.getFiremothDistance()
     local cell = tes3.player.cell
     if cell.isInterior then
-        return (INTERIORS[cell.name] and 0) or math.fhuge
+        return (string.startswith(cell.name, "Firemoth") and 0) or math.fhuge
     else
         return (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
     end

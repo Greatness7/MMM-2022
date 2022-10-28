@@ -27,10 +27,6 @@ local function updateColors(dist)
 end
 
 local function update(e)
-    if tes3.player.cell.isInterior then
-        toggleShader(false)
-        return
-    end
 
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist

@@ -10,7 +10,7 @@ local FOG_TIMER
 
 ---@type fogParams
 local fogParams = {
-    color = tes3vector3.new(0.07, 0.32, 0.35),
+    color = tes3vector3.new(0.09, 0.2, 0.15),
     center = utils.cells.FIREMOTH_REGION_ORIGIN,
     radius = tes3vector3.new(MAX_DISTANCE, MAX_DISTANCE, 128),
     density = 15,
