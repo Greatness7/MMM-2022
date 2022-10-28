@@ -3,10 +3,13 @@
     By Team Ceaseless Centurians
 --]]
 
+if tes3.getFileExists("MWSE\\mods\\hrnchamd\\weatheradjust\\main.lua") then
+	dofile("firemoth.weather.skyController")
+end
+
 event.register("initialized", function()
-    if debug.log(tes3.isModActive("firemoth.esm")) then
+    if tes3.isModActive("firemoth.esm") then
         require("firemoth.weather.camera")
-        -- dofile("firemoth.weather.skyController")
         dofile("firemoth.weather.lightningController")
         dofile("firemoth.weather.fogController")
         dofile("firemoth.shaders.tonemap")
@@ -17,10 +20,11 @@ event.register("initialized", function()
         dofile("firemoth.puzzles.skeletonSpawner")
         -- dofile("firemoth.puzzles.secretWall")
         dofile("firemoth.testing")
-        dofile("firemoth.npcs.seydaNeen")
+        dofile("firemoth.quests")
     end
 end)
 
 event.register("modConfigReady", function()
     dofile("Data Files\\MWSE\\mods\\firemoth\\mcm\\menu.lua")
 end)
+
