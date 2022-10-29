@@ -77,7 +77,7 @@ end
 
 
 local function applyShaderParams()
-    shader = mge.shaders.load({ name = "fog_box" })
+    shader = mge.shaders.load({ name = "fm_fog_box" })
     if shader then
         shader.fogColors = fogVolumes.fogColors
         shader.fogCenters = fogVolumes.fogCenters
