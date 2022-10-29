@@ -1,6 +1,7 @@
 local fog = require("firemoth.weather.fog")
 local utils = require("firemoth.utils")
 
+local MIN_DISTANCE = 8192 * 1.5
 local MAX_DISTANCE = 8192 * 3
 
 local fogId = "Firemoth Exterior"
@@ -16,6 +17,15 @@ local fogParams = {
     density = 15,
 }
 
+local function updateDensity(dist)
+    local f = math.clamp(dist, MIN_DISTANCE, MAX_DISTANCE)
+    f = math.remap(f, MIN_DISTANCE, MAX_DISTANCE, 15.0, 0.0)
+    if not math.isclose(f, fogParams.density, 0.001) then
+        fogParams.density = f
+        fog.createOrUpdateFog(fogId, fogParams)
+    end
+end
+
 local function update(e)
     if tes3.player.cell.isInterior then
         return
@@ -24,11 +34,8 @@ local function update(e)
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist
 
-    if math.min(currDist, prevDist) <= MAX_DISTANCE
-        and not math.isclose(currDist, prevDist, 0.001)
-    then
-        fogParams.density = utils.math.bellCurve(currDist, 15, 0, MAX_DISTANCE)
-        fog.createOrUpdateFog(fogId, fogParams)
+    if math.min(currDist, prevDist) <= MAX_DISTANCE then
+        updateDensity(currDist)
     end
 
     e.timer.data.prevDist = currDist
