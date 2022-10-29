@@ -1,8 +1,6 @@
-local this = {
-    id = "fm_2022",
-}
+local this = {}
 
-local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue(this.id))
+local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue("fm_2022"))
 
 --[[
     Quest Events
@@ -66,6 +64,10 @@ function this.setPersistentReferencesDisabled(disabled)
     for _, ref in pairs(this.clutter) do
         setDisabled(ref, disabled)
     end
+end
+
+function this.backdoorEntered()
+    return quest.journalIndex >= 400
 end
 
 return this
