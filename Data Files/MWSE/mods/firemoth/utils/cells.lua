@@ -64,18 +64,4 @@ function this.getNearbyCompanions()
     return nearbyCompanions
 end
 
-function this.calcInteriorFogPosition(cell)
-    local pos = { x = 0, y = 0, z = 0 }
-	local denom = 0
-
-	for stat in cell:iterateReferences() do
-		pos.x = pos.x + stat.position.x
-		pos.y = pos.y + stat.position.y
-		pos.z = pos.z + stat.position.z
-		denom = denom + 1
-	end
-
-    return tes3vector3.new(pos.x/denom, pos.y/denom, pos.z/denom)
-end
-
 return this

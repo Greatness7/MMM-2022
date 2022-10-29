@@ -5,7 +5,7 @@
 --]]
 
 if tes3.getFileExists("MWSE\\mods\\hrnchamd\\weatheradjust\\main.lua") then
-	dofile("firemoth.weather.skyController")
+    dofile("firemoth.weather.skyController")
 end
 
 event.register("initialized", function()
@@ -14,6 +14,7 @@ event.register("initialized", function()
         dofile("firemoth.weather.lightningController")
         dofile("firemoth.weather.fogController")
         dofile("firemoth.weather.fogDensityController")
+        dofile("firemoth.weather.fogInteriorController")
         dofile("firemoth.shaders.tonemap")
         dofile("firemoth.music.controller")
         dofile("firemoth.sounds.controller")
@@ -29,4 +30,3 @@ end)
 event.register("modConfigReady", function()
     dofile("Data Files\\MWSE\\mods\\firemoth\\mcm\\menu.lua")
 end)
-
