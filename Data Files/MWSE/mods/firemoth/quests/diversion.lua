@@ -15,9 +15,11 @@ local states = {
 local function arrivedHandler(data)
     -- Allow player to enter dialogue himself
     -- but if they walk too far away force it
-    local distance = tes3.player.position:distance(quest.npcs.mara.position)
-    if distance < 700 then
-        return
+    if data.secondsPassed < 3.5 then
+        local distance = tes3.player.position:distance(quest.npcs.mara.position)
+        if distance < 700 then
+            return
+        end
     end
 
     tes3.showDialogueMenu({ reference = quest.npcs.mara })
@@ -51,7 +53,7 @@ local function walkingHandler(data)
     end
 
     for _, ref in pairs({ quest.npcs.mara, quest.npcs.hjrondir, quest.npcs.aronil }) do
-        tes3.setAIWander({ reference = ref, range = 200, idles = { 75, 25, 0, 0, 0, 0, 0 } })
+        tes3.setAIWander({ reference = ref, range = 200, idles = { 25, 75, 0, 0, 0, 0, 0 } })
     end
 
     tes3.say({ reference = quest.npcs.mara, soundPath = "vo\\w\\f\\Idl_WF009.mp3" })
@@ -59,6 +61,9 @@ local function walkingHandler(data)
     timer.start({
         duration = 1.5,
         callback = function()
+            quest.npcs.mara.mobile.weaponReady = true
+            quest.npcs.aronil.mobile.weaponReady = true
+            quest.npcs.hjrondir.mobile.weaponReady = true
             tes3.say({ reference = quest.npcs.hjrondir, soundPath = "vo\\n\\m\\bAtk_NM006.mp3" })
         end,
     })

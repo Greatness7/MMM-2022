@@ -47,11 +47,12 @@ event.register("firemoth:travelAccepted", function()
         orientation = { 0.00, 0.00, -1.71 },
     })
 
-    -- Disable greetings; we play custom sounds instead.
-    quest.npcs.mara.mobile.hello = 0
-    quest.npcs.aronil.mobile.hello = 0
-    quest.npcs.hjrondir.mobile.hello = 0
-    quest.npcs.silmdar.mobile.hello = 0
+    for _, ref in pairs({ quest.npcs.mara, quest.npcs.hjrondir, quest.npcs.aronil }) do
+        -- Disable greetings; we play custom sounds instead.
+        ref.mobile.hello = 0
+        -- Bias idle chances to prefer "Look over shoulders".
+        tes3.setAIWander({ reference = ref, range = 0, idles = { 30, 30, 10, 10, 10, 10, 0 } })
+    end
 
     timer.start({
         duration = 1.5,
