@@ -10,12 +10,7 @@ local fogId = "Firemoth Exterior"
 local FOG_TIMER
 
 ---@type fogParams
-local fogParams = {
-    color = tes3vector3.new(0.09, 0.2, 0.15),
-    center = utils.cells.FIREMOTH_REGION_ORIGIN,
-    radius = tes3vector3.new(MAX_DISTANCE, MAX_DISTANCE, 128),
-    density = 15,
-}
+local fogParams = {}
 
 local function updateDensity(dist)
     local f = math.clamp(dist, MIN_DISTANCE, MAX_DISTANCE)
@@ -27,9 +22,8 @@ local function updateDensity(dist)
 end
 
 local function update(e)
-    if tes3.player.cell.isInterior then
-        return
-    end
+
+    if table.empty(fogParams) then return end
 
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist
@@ -52,10 +46,28 @@ end)
 --- @param e cellChangedEventData
 local function cellChangedCallback(e)
     local dist = utils.cells.getFiremothDistance()
-    if dist > MAX_DISTANCE or e.cell.isInterior then
+    if dist > MAX_DISTANCE then
         fog.deleteFog(fogId)
         FOG_TIMER:pause()
     else
+        local cell = e.cell
+
+        if cell.isInterior then
+            fogParams = {
+                color = tes3vector3.new(0.06, 0.13, 0.11),
+                center = utils.cells.calcInteriorFogPosition(cell),
+                radius = tes3vector3.new(MAX_DISTANCE, MAX_DISTANCE, 220),
+                density = 20,
+            }
+        else
+            fogParams = {
+                color = tes3vector3.new(0.09, 0.2, 0.15),
+                center = utils.cells.FIREMOTH_REGION_ORIGIN,
+                radius = tes3vector3.new(MAX_DISTANCE, MAX_DISTANCE, 400),
+                density = 30,
+            }
+        end
+
         fog.createOrUpdateFog(fogId, fogParams)
         FOG_TIMER:resume()
     end
