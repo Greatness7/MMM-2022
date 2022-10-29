@@ -10,15 +10,11 @@ this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(
     0
 )
 
---- @param cell tes3cell
---- @returns boolean
-function this.isFiremothCell(cell)
-    if cell == nil then
-        return false
-    elseif cell.isInterior then
-        return string.startswith(cell.name, "Firemoth") or false
-    end
+function this.isFiremothInterior(cell)
+    return cell.name:startswith("Firemoth") or false
+end
 
+function this.isFiremothExterior(cell)
     -- Our exterior grid ranges from (-7, -9) to (-9, -11)
 
     local x = cell.gridX
@@ -34,14 +30,16 @@ function this.isFiremothCell(cell)
     return true
 end
 
-function this.getNearbyCompanions()
-    local nearbyCompanions = {}
-    for companion in tes3.iterate(tes3.mobilePlayer.friendlyActors) do
-        if tes3.getCurrentAIPackageId(companion) == tes3.aiPackage.follow then
-            table.insert(nearbyCompanions, companion)
-        end
+--- @param cell tes3cell
+--- @returns boolean
+function this.isFiremothCell(cell)
+    if cell == nil then
+        return false
+    elseif cell.isInterior then
+        return this.isFiremothInterior(cell)
+    else
+        return this.isFiremothExterior(cell)
     end
-    return nearbyCompanions
 end
 
 --- Distance from the center for Firemoth Region.
@@ -50,10 +48,20 @@ end
 function this.getFiremothDistance()
     local cell = tes3.player.cell
     if cell.isInterior then
-        return cell.name:startswith("Firemoth") and 0 or math.fhuge
+        return this.isFiremothInterior(cell) and 0 or math.fhuge
     else
         return (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
     end
+end
+
+function this.getNearbyCompanions()
+    local nearbyCompanions = {}
+    for companion in tes3.iterate(tes3.mobilePlayer.friendlyActors) do
+        if tes3.getCurrentAIPackageId(companion) == tes3.aiPackage.follow then
+            table.insert(nearbyCompanions, companion)
+        end
+    end
+    return nearbyCompanions
 end
 
 return this

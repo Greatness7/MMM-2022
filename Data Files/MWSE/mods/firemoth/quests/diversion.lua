@@ -1,3 +1,4 @@
+local utils = require("firemoth.utils")
 local quest = require("firemoth.quests.lib")
 local pathingController = require("firemoth.quests.pathingController")
 
@@ -105,10 +106,12 @@ local function fightingHandler(data)
 end
 
 local function update(e)
-    local data = e.timer.data
+    if not utils.cells.isFiremothExterior(tes3.player.cell) then
+        return
+    end
 
-    ---@diagnostic disable-next-line: redundant-parameter
-    local timestamp = tes3.getSimulationTimestamp(false)
+    local data = e.timer.data
+    local timestamp = tes3.getSimulationTimestamp(false) ---@diagnostic disable-line
 
     data.timestamp = data.timestamp or timestamp
     data.secondsPassed = timestamp - data.timestamp
