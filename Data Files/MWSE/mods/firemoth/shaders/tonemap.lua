@@ -32,7 +32,9 @@ end
 local function update(e)
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist
-    if math.min(currDist, prevDist) <= MAX_DISTANCE then
+    if math.min(currDist, prevDist) <= MAX_DISTANCE
+        and not math.isclose(currDist, prevDist, 0.001)
+    then
         toggleShader(currDist <= MAX_DISTANCE)
         updateColors(currDist)
     end
@@ -43,6 +45,6 @@ event.register(tes3.event.loaded, function()
         iterations = -1,
         duration = 1 / 10,
         callback = update,
-        data = { prevDist = 0 },
+        data = { prevDist = -1 },
     })
 end)
