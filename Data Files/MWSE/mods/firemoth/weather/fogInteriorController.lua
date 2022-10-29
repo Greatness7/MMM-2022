@@ -6,33 +6,40 @@ local fogId = "Firemoth Exterior"
 ---@type fogParams
 local fogParams = {
     color = tes3vector3.new(0.06, 0.13, 0.11),
-    center = tes3vector3.new(0, 0, 0),
-    radius = tes3vector3.new(8192 * 3, 8192 * 3, 220),
-    density = 20,
+    center = tes3vector3.new(),
+    radius = tes3vector3.new(),
+    density = 2.5,
 }
 
-local function calcInteriorFogParams(cell)
-    local pos = { x = 0, y = 0, z = 0 }
-    local denom = 0
-
-    for stat in cell:iterateReferences() do
-        pos.x = pos.x + stat.position.x
-        pos.y = pos.y + stat.position.y
-        pos.z = pos.z + stat.position.z
-        denom = denom + 1
+local function calcInteriorFogCenter(cell)
+    -- get the min z position of static's bonding boxes
+    local minimumZ = tes3.player.position.z
+    for ref in cell:iterateReferences(tes3.objectType.static) do
+        minimumZ = math.min(minimumZ, (ref.position + ref.object.boundingBox.min).z)
     end
 
-    return tes3vector3.new(pos.x / denom, pos.y / denom, pos.z / denom)
+    local root = tes3.game.worldObjectRoot
+    local origin = root.worldBoundOrigin
+    local radius = root.worldBoundRadius
+
+    -- center fog then lower it to bounding box minimum z
+    fogParams.center.x = origin.x
+    fogParams.center.y = origin.y
+    fogParams.center.z = minimumZ
+
+    -- update radius to cover 64 units above player (feet)
+    fogParams.radius.x = radius
+    fogParams.radius.y = radius
+    fogParams.radius.z = tes3.player.position.z - minimumZ + 64
 end
 
 --- @param e cellChangedEventData
 local function cellChangedCallback(e)
     if utils.cells.isFiremothInterior(e.cell) then
-        fogParams.center = calcInteriorFogParams(e.cell)
+        calcInteriorFogCenter(e.cell)
         fog.createOrUpdateFog(fogId, fogParams)
-        tes3.messageBox("ADDED INTERIOR FOG")
     else
-        fog.deleteFog("Firemoth Interior")
+        fog.deleteFog(fogId)
     end
 end
 event.register(tes3.event.cellChanged, cellChangedCallback)
