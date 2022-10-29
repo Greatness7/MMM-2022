@@ -78,7 +78,7 @@
 
 #### Arriving on Island
 
-> There’s so many of them, this will be like shooting hagfish in a barrel. I just hope I brought enough arrows, I admit.
+> There’s so many of them, just like the last time. This will be like shooting hagfish in a barrel. I just hope I brought enough arrows, I admit.
 
 > [Mara has a bloodlust in her eyes.]
 
@@ -87,6 +87,18 @@
 > I must admit I'm glad to see you. Let's end this.
 
 > [Mara looks determined.]
+
+#### last time
+
+> I was there before, this task should not be undertaken likely. A horde of skeletons protect the island along with an everlasting thunderstorm making crossing the water near-impossible.
+
+#### crossing the water
+
+> There was a short crossing where the strikes were less frequent, likely thanks to destroyed ships piling up in the area.
+
+#### Fighting Skeletons Too Long
+
+> What are you helping us for? Get to the fort, and stay out of the water!
 
 ### Gravius
 
