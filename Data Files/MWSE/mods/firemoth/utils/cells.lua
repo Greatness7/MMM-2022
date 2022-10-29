@@ -50,7 +50,7 @@ end
 function this.getFiremothDistance()
     local cell = tes3.player.cell
     if cell.isInterior then
-        return (string.startswith(cell.name, "Firemoth") and 0) or math.fhuge
+        return cell.name:startswith("Firemoth") and 0 or math.fhuge
     else
         return (tes3.player.position * XY):distance(this.FIREMOTH_REGION_ORIGIN)
     end

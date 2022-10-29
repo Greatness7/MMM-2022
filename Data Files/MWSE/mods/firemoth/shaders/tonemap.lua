@@ -1,6 +1,6 @@
 local utils = require("firemoth.utils")
 
-local MIN_DISTANCE = 8192 * 0.25
+local MIN_DISTANCE = 8192 * 1.5
 local MAX_DISTANCE = 8192 * 3.5
 
 local shader = assert(mge.shaders.load({ name = "fm_tonemap" }))
@@ -17,26 +17,25 @@ local function toggleShader(enabled)
     end
 end
 
+local prevUpdate = 0
 local function updateColors(dist)
     local f = math.clamp(dist, MIN_DISTANCE, MAX_DISTANCE)
     f = math.remap(f, MIN_DISTANCE, MAX_DISTANCE, 1.0, 0.0)
-    shader.exposure = exposure * f
-    shader.saturation = saturation * f
-    shader.defog = defog * f
+    if not math.isclose(f, prevUpdate, 0.001) then
+        shader.exposure = exposure * f
+        shader.saturation = saturation * f
+        shader.defog = defog * f
+    end
+    prevUpdate = f
 end
 
 local function update(e)
-
     local currDist = utils.cells.getFiremothDistance()
     local prevDist = e.timer.data.prevDist or currDist
-
-    -- are we within the trigger distance
-    -- and has the distance been modified
     if math.min(currDist, prevDist) <= MAX_DISTANCE then
         toggleShader(currDist <= MAX_DISTANCE)
         updateColors(currDist)
     end
-
     e.timer.data.prevDist = currDist
 end
 event.register(tes3.event.loaded, function()
