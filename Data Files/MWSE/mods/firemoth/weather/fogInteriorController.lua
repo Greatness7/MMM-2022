@@ -1,7 +1,7 @@
 local fog = require("firemoth.weather.fog")
 local utils = require("firemoth.utils")
 
-local fogId = "Firemoth Exterior"
+local fogId = "Firemoth Interior"
 
 ---@type fogParams
 local fogParams = {
