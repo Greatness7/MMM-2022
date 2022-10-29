@@ -20,7 +20,6 @@ end
 local function updateColors(dist)
     local f = math.clamp(dist, MIN_DISTANCE, MAX_DISTANCE)
     f = math.remap(f, MIN_DISTANCE, MAX_DISTANCE, 1.0, 0.0)
-    -- tes3.messageBox("tonemap: %s", f)
     shader.exposure = exposure * f
     shader.saturation = saturation * f
     shader.defog = defog * f
@@ -33,9 +32,7 @@ local function update(e)
 
     -- are we within the trigger distance
     -- and has the distance been modified
-    if math.min(currDist, prevDist) <= MAX_DISTANCE
-        and not math.isclose(currDist, prevDist, 0.001)
-    then
+    if math.min(currDist, prevDist) <= MAX_DISTANCE then
         toggleShader(currDist <= MAX_DISTANCE)
         updateColors(currDist)
     end
