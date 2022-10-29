@@ -1,6 +1,7 @@
 --[[
     Firemoth Reclaimed
-    By Team Ceaseless Centurians
+    by team Ceaseless Centurions
+    MMM 2022
 --]]
 
 if tes3.getFileExists("MWSE\\mods\\hrnchamd\\weatheradjust\\main.lua") then
