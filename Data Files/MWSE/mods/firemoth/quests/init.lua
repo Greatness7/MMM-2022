@@ -74,8 +74,10 @@ end)
 
 
 
--- Override behave of various Firemoth doors.
+-- Override behavior of various Firemoth doors.
 event.register(tes3.event.activate, function(e)
+    ---@cast e activateEventData
+
     if e.activator ~= tes3.player then
         return
     elseif quest.backdoorEntered() then
