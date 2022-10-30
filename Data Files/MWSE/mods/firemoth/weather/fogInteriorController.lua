@@ -14,8 +14,10 @@ local fogParams = {
 local function calcInteriorFogCenter(cell)
     -- get the min z position of static's bonding boxes
     local minimumZ = tes3.player.position.z
-    for ref in cell:iterateReferences(tes3.objectType.static) do
-        minimumZ = math.min(minimumZ, (ref.position + ref.object.boundingBox.min).z)
+    if not (cell.name == "Firemoth, Chapel of Kynareth") then
+        for ref in cell:iterateReferences(tes3.objectType.static) do
+            minimumZ = math.min(minimumZ, (ref.position + ref.object.boundingBox.min).z)
+        end
     end
 
     local root = tes3.game.worldObjectRoot
