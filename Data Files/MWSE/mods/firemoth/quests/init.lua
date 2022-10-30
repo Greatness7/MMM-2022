@@ -173,3 +173,10 @@ event.register(tes3.event.equip, function(e)
 
     return false
 end)
+
+event.register(tes3.event.death, function(e)
+    ---@cast e deathEventData
+    if e.reference == quest.npcs.grurn then
+        quest.setGrurnDefeated()
+    end
+end)
