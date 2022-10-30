@@ -36,6 +36,10 @@
 
 > Are you ready?
 
+#### Corpse Found
+
+> Hjrondir. The poor Nord.
+
 #### Defeat
 
 > You've done better than I was expecting. Well done, now let's head back to Sellus Gravius.
@@ -96,6 +100,10 @@
 
 > [Mara looks determined.]
 
+#### Corpse Found
+
+> Is that Hjrondir? We should be careful.
+
 #### Defeat
 
 > It's over. It's finally over. I can't thank you enough, come on let's report back.
@@ -130,6 +138,8 @@
 |200|Sellus Gravius of Seyda Neen has tasked me with leading a band of adventurers out to the overrun fort of Firemoth. It is there that we will fight the skeleton army of Grurn and return with the Ward of Akavir.|
 |300|I have arrived on the islet of Fort Firemoth, faced with hostile and unnatural weather.|
 |350|An ambush of skeletons arose from the ground. We should make our way to the fort as quickly as possible.|
-|400|I have reached the fort's entrance, I should investigate further.|
+|400|I've found Fort Firemoth secret entrance. I should recall my companions before proceeding.|
+|450|With companions recalled inside Fort Firemoth, we should find and eliminate the lich Grurn.|
+|475|We found the corpse of Hjrondir inside the Fort Firemoth walls.|
 |500|I killed Grurn, put an end to the raging storm, and found the Ward of Akavir. I should report back to Sellus Gravius.|
 |600|I have reported to Sellus Gravius and he's allowed me to keep the Ward of Akavir for my good deeds.|
