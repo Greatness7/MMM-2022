@@ -36,6 +36,10 @@
 
 > Are you ready?
 
+#### Defeat
+
+> You've done better than I was expecting. Well done, now let's head back to Sellus Gravius.
+
 ### Hjrondir
 
 #### Before Accepting
@@ -62,6 +66,10 @@
 
 > You have my axe.
 
+#### Defeat
+
+> You did good. Drinks're on you.
+
 ### Mara
 
 #### Before Accepting
@@ -87,6 +95,10 @@
 > I must admit I'm glad to see you. Let's end this.
 
 > [Mara looks determined.]
+
+#### Defeat
+
+> It's over. It's finally over. I can't thank you enough, come on let's report back.
 
 #### last time
 
