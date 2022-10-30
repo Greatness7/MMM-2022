@@ -7,7 +7,6 @@ local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue("fm_2022"))
 --]]
 
 local events = {
-    [-1] = "firemoth:questReset",
     [200] = "firemoth:questAccepted",
     [300] = "firemoth:travelAccepted",
 }
@@ -38,9 +37,8 @@ local function onLoaded()
     this.npcs.silmdar = assert(tes3.getReference("fm_silmdar"))
     this.clutter.seydaBoat = assert(tes3.getReference("fm_seyda_boat"))
     this.clutter.mudcrabDead = assert(tes3.getReference("fm_mudcrab_dead"))
-
     if quest.journalIndex < 200 then
-        event.trigger("firemoth:QuestReset")
+        this.setPersistentReferencesDisabled(true)
     end
 end
 event.register(tes3.event.loaded, onLoaded, { priority = 7000 })
@@ -66,8 +64,72 @@ function this.setPersistentReferencesDisabled(disabled)
     end
 end
 
+function this.companionReferences()
+    return coroutine.wrap(function()
+        coroutine.yield(this.npcs.mara)
+        coroutine.yield(this.npcs.aronil)
+        coroutine.yield(this.npcs.hjrondir)
+    end)
+end
+
+
+function this.travelFinished()
+    return quest.journalIndex >= 300
+end
+
 function this.backdoorEntered()
     return quest.journalIndex >= 400
 end
+
+function this.companionsRecalled()
+    return quest.journalIndex >= 450
+end
+
+function this.undeadHjrondir()
+    return quest.journalIndex >= 475
+end
+
+
+function this.setFightingStarted()
+    tes3.updateJournal({ id = quest.id, index = 350, showMessage = true })
+end
+
+function this.setBackdoorEntered()
+    tes3.updateJournal({ id = quest.id, index = 400, showMessage = true })
+end
+
+function this.setCompanionsRecalled()
+    tes3.updateJournal({ id = quest.id, index = 450, showMessage = true })
+end
+
+
+local function recallCompanions(e)
+    for _, ref in pairs({ this.npcs.mara, this.npcs.aronil }) do
+        debug.log(ref)
+        if ref.cell ~= tes3.player.cell then
+            mwse.log("positionCell: %s", ref)
+            tes3.positionCell({
+                reference = ref,
+                position = tes3.player.position,
+                cell = tes3.player.cell,
+                forceCellChange = true,
+            })
+            return
+        end
+        if tes3.getCurrentAIPackageId({ reference = ref }) ~= tes3.aiPackage.follow then
+            mwse.log("setAIFollow: %s", ref)
+            ref:disable()
+            ref:enable()
+            tes3.setAIFollow({ reference = ref, target = tes3.player })
+            return
+        end
+    end
+
+    tes3.removeItem({ reference = tes3.player, item = "fm_sc_recall" })
+
+    e.timer:cancel()
+end
+timer.register("firemoth:recallCompanions", recallCompanions)
+
 
 return this

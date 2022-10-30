@@ -1,8 +1,10 @@
 local utils = require("firemoth.utils")
 local quest = require("firemoth.quests.lib")
+local skeletonSpawner = require("firemoth.quests.skeletonSpawner")
 local pathingController = require("firemoth.quests.pathingController")
 
 local FIGHTING_POSITION = { -56195.49, -75071.70, 93.58 }
+local FIGHTING_POSITION_VEC = tes3vector3.new(unpack(FIGHTING_POSITION))
 
 local states = {
     arrived = 0,
@@ -15,16 +17,19 @@ local states = {
 local function arrivedHandler(data)
     -- Allow player to enter dialogue himself
     -- but if they walk too far away force it
-    if data.secondsPassed < 3.5 then
-        local distance = tes3.player.position:distance(quest.npcs.mara.position)
-        if distance < 700 then
-            return
-        end
+    local distance = tes3.player.position:distance(quest.npcs.mara.position)
+    if distance < 500 and data.secondsPassed < 4.5 then
+        return
     end
 
     tes3.showDialogueMenu({ reference = quest.npcs.mara })
 
     -- start walking inland
+
+    for ref in quest.companionReferences() do
+        ref.mobile.weaponReady = true
+        ref.mobile.speed.current = 60
+    end
 
     pathingController.startPathing(quest.npcs.mara, {
         { -56110.94, -73762.62, 67.36 },
@@ -52,7 +57,7 @@ local function walkingHandler(data)
         return
     end
 
-    for _, ref in pairs({ quest.npcs.mara, quest.npcs.hjrondir, quest.npcs.aronil }) do
+    for ref in quest.companionReferences() do
         tes3.setAIWander({ reference = ref, range = 200, idles = { 25, 75, 0, 0, 0, 0, 0 } })
     end
 
@@ -61,9 +66,6 @@ local function walkingHandler(data)
     timer.start({
         duration = 1.5,
         callback = function()
-            quest.npcs.mara.mobile.weaponReady = true
-            quest.npcs.aronil.mobile.weaponReady = true
-            quest.npcs.hjrondir.mobile.weaponReady = true
             tes3.say({ reference = quest.npcs.hjrondir, soundPath = "vo\\n\\m\\bAtk_NM006.mp3" })
         end,
     })
@@ -76,6 +78,7 @@ local function spawningHandler(data)
     if data.secondsPassed < 3.0 then
         return
     end
+    quest.setFightingStarted()
 
     tes3.player.data.fm_skeletonSpawnerPosition = FIGHTING_POSITION
     tes3.player.data.fm_skeletonSpawnerDisabled = false
@@ -85,32 +88,33 @@ local function spawningHandler(data)
 end
 
 local function fightingHandler(data)
-    if data.secondsPassed < 3.0 then
-        return
+    if data.secondsPassed >= 20 then
+        if quest.npcs.mara.position:distance(tes3.player.position) <= 1024 then
+            tes3.showDialogueMenu({ reference = quest.npcs.mara })
+            data.timestamp = nil -- reset the 30 second countdown
+        end
     end
-    data.timestamp = nil
 
-    for _, ref in pairs({ quest.npcs.mara, quest.npcs.hjrondir, quest.npcs.aronil }) do
+    for ref in quest.companionReferences() do
         local mob = assert(ref.mobile)
+
         mob.health.current = 500
         mob.fatigue.current = 500
         mob.magicka.current = 500
 
-        if not mob.inCombat then
-            local nearbyActors = tes3.findActorsInProximity({ reference = ref, range = 2048 })
-            for _, actor in pairs(nearbyActors) do
-                if actor.object.objectType == tes3.objectType.creature then
-                    if not actor.isDead then
-                        mob:startCombat(actor)
-                    end
-                    break
-                end
-            end
+        if next(skeletonSpawner.skeletons) and not mob.inCombat then
+            local closest = utils.math.getClosestReference(ref.position, skeletonSpawner.skeletons)
+            mob:startCombat(closest.mobile)
         end
     end
 end
 
 local function update(e)
+    if quest.backdoorEntered() then
+        e.timer:cancel()
+        return
+    end
+
     if not utils.cells.isFiremothExterior(tes3.player.cell) then
         return
     end

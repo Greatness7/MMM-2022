@@ -30,8 +30,8 @@ function this.isFiremothExterior(cell)
     return true
 end
 
---- @param cell tes3cell
---- @returns boolean
+---@param cell tes3cell
+---@returns boolean
 function this.isFiremothCell(cell)
     if cell == nil then
         return false
@@ -44,7 +44,7 @@ end
 
 --- Distance from the center for Firemoth Region.
 ---
---- @return number
+---@return number
 function this.getFiremothDistance()
     local cell = tes3.player.cell
     if cell.isInterior then

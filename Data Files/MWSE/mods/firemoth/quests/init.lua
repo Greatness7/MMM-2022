@@ -1,22 +1,16 @@
 local quest = require("firemoth.quests.lib")
-
-local diversion = dofile("firemoth.quests.diversion")
+local diversion = require("firemoth.quests.diversion")
+local skeletonSpawner = require("firemoth.quests.skeletonSpawner")
 
 --[[
     Journal Events
 --]]
-
-event.register("firemoth:questReset", function()
-    quest.setPersistentReferencesDisabled(true)
-end)
 
 event.register("firemoth:questAccepted", function()
     quest.setPersistentReferencesDisabled(false)
 end)
 
 event.register("firemoth:travelAccepted", function()
-    tes3ui.leaveMenuMode()
-
     -- Disable skeleton spawning until NPCs are ready.
     tes3.player.data.fm_skeletonSpawnerDisabled = true
 
@@ -47,7 +41,7 @@ event.register("firemoth:travelAccepted", function()
         orientation = { 0.00, 0.00, -1.71 },
     })
 
-    for _, ref in pairs({ quest.npcs.mara, quest.npcs.hjrondir, quest.npcs.aronil }) do
+    for ref in quest.companionReferences() do
         -- Disable greetings; we play custom sounds instead.
         ref.mobile.hello = 0
         -- Bias idle chances to prefer "Look over shoulders".
@@ -79,6 +73,8 @@ event.register("firemoth:travelAccepted", function()
 end)
 
 
+
+-- Override behave of various Firemoth doors.
 event.register(tes3.event.activate, function(e)
     if e.activator ~= tes3.player then
         return
@@ -88,8 +84,84 @@ event.register(tes3.event.activate, function(e)
 
     local destination = e.target.destination
     local cell = destination and destination.cell
-    if cell and (cell.id == "Firemoth, Keep") then
-        tes3.messageBox("Unusual magic seals this door. You'll have to find another way in.")
+    if not (cell and cell.id:startswith("Firemoth")) then
+        return
+    end
+
+    if cell.id == "Firemoth, Upper Mines" then
+        quest.setBackdoorEntered()
+        return
+    end
+
+    tes3.messageBox("Unusual magic seals this door. You'll have to find another way in.")
+
+    return false
+end)
+
+
+-- Disable traveling until all NPCs are recruited.
+event.register(tes3.event.activate, function(e)
+    ---@cast e activateEventData
+
+    if e.activator ~= tes3.player then
+        return
+    elseif quest.travelFinished() then
+        return
+    elseif e.target ~= quest.npcs.silmdar then
+        return
+    end
+
+    local variable = tes3.findGlobal("fm_companions_gathered")
+    variable.value = 1 -- all companions gathered
+
+    local position = tes3.player.position
+    for ref in quest.companionReferences() do
+        if position:distance(ref.position) > 1024 then
+            variable.value = 0 -- companion missing
+        end
+    end
+end)
+
+
+-- Handle compaion recall scroll quest item.
+event.register(tes3.event.equip, function(e)
+    ---@cast e equipEventData
+
+    if e.reference ~= tes3.player then
+        return
+    elseif e.item.id ~= "fm_sc_recall" then
+        return
+    end
+
+    if not quest.backdoorEntered() then
+        tes3.messageBox("This scroll can only be used inside Fort Firemoth.")
         return false
     end
+
+    if not quest.companionsRecalled() then
+        quest.setCompanionsRecalled()
+        tes3ui.leaveMenuMode()
+
+        tes3.playSound({
+            reference = tes3.player,
+            sound = "mysticism area",
+        })
+
+        tes3.createVisualEffect({
+            reference = tes3.player,
+            object = "VFX_MysticismCast",
+            lifespan = 1.0,
+        })
+
+        timer.start({
+            iterations = -1,
+            duration = 0.35,
+            callback = "firemoth:recallCompanions", ---@diagnostic disable-line
+            persist = true,
+        })
+
+        return false
+    end
+
+    return false
 end)

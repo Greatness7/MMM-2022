@@ -68,4 +68,40 @@ function this.nonRepeatTableRNG(t)
     end
 end
 
+---@param position tes3vector3
+---@param references table<tes3reference, any>
+---@return tes3reference, number
+function this.getClosestReference(position, references)
+    local reference = nil
+    local distance = math.fhuge
+
+    for ref in pairs(references) do
+        local dist = position:distance(ref.position)
+        if dist < distance then
+            reference = ref
+            distance = dist
+        end
+    end
+
+    return reference, distance
+end
+
+---@param position tes3vector3
+---@param references table<tes3reference, any>
+---@return tes3reference, number
+function this.getFarthestReference(position, references)
+    local reference = nil
+    local distance = 0
+
+    for ref in pairs(references) do
+        local dist = position:distance(ref.position)
+        if dist > distance then
+            reference = ref
+            distance = dist
+        end
+    end
+
+    return reference, distance
+end
+
 return this

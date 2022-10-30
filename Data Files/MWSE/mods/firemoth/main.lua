@@ -10,20 +10,17 @@ end
 
 event.register("initialized", function()
     if tes3.isModActive("firemoth.esm") then
+        require("firemoth.quests")
+        require("firemoth.shaders.tonemap")
+
         require("firemoth.weather.camera")
-        dofile("firemoth.weather.lightningController")
-        dofile("firemoth.weather.fogController")
-        dofile("firemoth.weather.fogDensityController")
-        dofile("firemoth.weather.fogInteriorController")
-        dofile("firemoth.shaders.tonemap")
-        dofile("firemoth.music.controller")
-        dofile("firemoth.sounds.controller")
-        dofile("firemoth.puzzles.infiniteCorners")
-        dofile("firemoth.puzzles.alternatingStairs")
-        dofile("firemoth.puzzles.skeletonSpawner")
-        -- dofile("firemoth.puzzles.secretWall")
-        dofile("firemoth.testing")
-        dofile("firemoth.quests")
+        require("firemoth.weather.lightningController")
+        require("firemoth.weather.fogController")
+        require("firemoth.weather.fogDensityController")
+        require("firemoth.weather.fogInteriorController")
+
+        require("firemoth.music.controller")
+        require("firemoth.sounds.controller")
     end
 end)
 

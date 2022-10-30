@@ -1,8 +1,11 @@
 local utils = require("firemoth.utils")
 
+local this = {}
+
 local MAX_SKELETONS = 12
 
-local MAX_SPAWN_DISTANCE = 2048
+local TIME_BEFORE_RESPAWN = 10
+
 
 local SKELETON_OBJECTS = {
     [tes3.getObject("fm_skeleton_1")] = --[[Anim Duration]] 7.7,
@@ -22,13 +25,13 @@ local SKELETON_VFX = {
 }
 
 ---@type table<tes3reference, boolean>
-local spawners = {}
+this.spawners = {}
 
 ---@type table<tes3reference, boolean>
-local skeletons = {}
+this.skeletons = {}
 
 ---@type table<tes3reference, boolean>
-local corpses = {}
+this.corpses = {}
 
 ---@type mwseTimer
 local spawnTimer = nil
@@ -38,116 +41,105 @@ local randomSkeletonSound = utils.math.nonRepeatTableRNG(table.keys(SKELETON_SOU
 local randomSkeletonVFX = utils.math.nonRepeatTableRNG(table.keys(SKELETON_VFX))
 
 
-local function availableSpawners(timestamp)
-    return coroutine.wrap(function()
-        for spawner in pairs(spawners) do
-            local time = spawner.data.fm_spawnTime or math.fhuge
-            if math.abs(timestamp - time) >= 10 then -- min 10s since last spawn
-                coroutine.yield(spawner)
-            end
-        end
-    end)
-end
-
-
-local function getClosestAvailableSpawner(position, timestamp)
-    local closestSpawner = nil
-    local distance = MAX_SPAWN_DISTANCE
-
-    for spawner in availableSpawners(timestamp) do
-        local dist = position:distance(spawner.position)
-        if dist < distance then
-            closestSpawner = spawner
-            distance = dist
+local function getAvailableSpawners(timestamp)
+    local spawners = {}
+    for spawner in pairs(this.spawners) do
+        local time = spawner.data.fm_spawnTime or math.fhuge
+        if math.abs(timestamp - time) >= TIME_BEFORE_RESPAWN then
+            spawners[spawner] = true
         end
     end
-
-    return closestSpawner, distance
-end
-
-
-local function getFarthestReference(references)
-    local position = tes3.player.position
-
-    local farthestSkeleton = nil
-    local distance = 0
-
-    for skeleton in pairs(references) do
-        local dist = position:distance(skeleton.position)
-        if dist > distance then
-            farthestSkeleton = skeleton
-            distance = dist
-        end
-    end
-
-    return farthestSkeleton, distance
+    return spawners
 end
 
 
 local function resetSpawnerTimes()
-    for spawner in pairs(spawners) do
+    for spawner in pairs(this.spawners) do
         spawner.data.fm_spawnTime = nil
     end
 end
 
 
+local function isSkeleton(reference)
+    return SKELETON_OBJECTS[reference.baseObject] ~= nil
+end
+
+
 local function attackClosestHuman(skeleton)
-    local nearbyHumanActors = {}
-    for _, actor in pairs(tes3.findActorsInProximity({ reference = skeleton, range = 1024 })) do
-        if not SKELETON_OBJECTS[actor.object.baseObject] then
-            table.insert(nearbyHumanActors, actor)
+    local nearbyActors = tes3.findActorsInProximity({ reference = skeleton, range = 1024 })
+
+    local humans = {}
+    for _, actor in pairs(nearbyActors) do
+        if not actor.isDead and not isSkeleton(actor.reference) then
+            humans[actor.reference] = true
         end
     end
-    local actor = table.choice(nearbyHumanActors)
-    if actor then
-        skeleton.mobile:startCombat(actor)
+
+    if next(humans) then
+        local closest = utils.math.getClosestReference(skeleton.position, humans)
+        skeleton.mobile:startCombat(closest.mobile)
     end
 end
 
 
+local function cleanCorpses()
+    -- For performance, if the amount of corpses is too high just delete them.
+    if table.size(this.corpses) >= MAX_SKELETONS * 2 then
+        local corpse = utils.math.getFarthestReference(tes3.player.position, this.corpses)
+        if corpse then
+            corpse:disable()
+            corpse:delete()
+        end
+    end
+    return true
+end
+
+
+local function cleanSkeletons()
+    -- If we're at the max number of skeletons then 'respawn' the farthest one.
+    -- Otherwise player can just spawn all skeletons on an island and ditch it.
+    if table.size(this.skeletons) >= MAX_SKELETONS then
+        local skeleton, distance = utils.math.getFarthestReference(tes3.player.position, this.skeletons)
+        if distance <= 1024 then
+            return false
+        end
+        skeleton:disable()
+        skeleton:delete()
+    end
+    return true
+end
+
+
+local function getSpawningPosition()
+    -- Override position during quest battle, unless we're too far away.
+    local override = tes3.player.data.fm_skeletonSpawnerPosition
+    if override then
+        override = tes3vector3.new(unpack(override))
+        if override:distance(tes3.player.position) <= 2048 then
+            return override
+        end
+    end
+    -- Spawn slightly forward, so that we can visually see them rising.
+    return tes3.getPlayerEyePosition() + tes3.getPlayerEyeVector() * 256
+end
+
+
 local function spawnSkeleton()
-    local timestamp = tes3.getSimulationTimestamp()
     if tes3.player.data.fm_skeletonSpawnerDisabled then
         return
     end
 
-    -- Position override is set during the quest battle.
-    local position = tes3.player.data.fm_skeletonSpawnerPosition
-    if position then
-        position = tes3vector3.new(unpack(position))
-        -- Revert override if we're far from the battle.
-        if position:distance(tes3.player.position) > 2048 then
-            position = nil
-        end
-    end
-
-    if position == nil then
-        position = tes3.getPlayerEyePosition() + tes3.getPlayerEyeVector() * 256
-    end
-
-    local spawner = getClosestAvailableSpawner(position, timestamp)
+    local position = getSpawningPosition()
+    local timestamp = tes3.getSimulationTimestamp(false) ---@diagnostic disable-line
+    local spawner = utils.math.getClosestReference(position, getAvailableSpawners(timestamp))
     if not spawner then
         resetSpawnerTimes()
         return
     end
 
-    -- If we're at the max number of skeletons then 'respawn' the farthest one.
-    -- Otherwise player can just spawn all skeletons on an island and ditch it.
-    if table.size(skeletons) >= MAX_SKELETONS then
-        local skeleton, distance = getFarthestReference(skeletons)
-        if distance <= 1024 then
-            return
-        end
-        skeleton:disable()
-        skeleton:delete()
-    end
-
-    if table.size(corpses) >= MAX_SKELETONS * 2 then
-        local corpse = getFarthestReference(corpses)
-        if corpse then
-            corpse:disable()
-            corpse:delete()
-        end
+    -- bail if we've got too much shit active.
+    if not cleanCorpses() or not cleanSkeletons() then
+        return
     end
 
     local skeleton = tes3.createReference({
@@ -194,14 +186,16 @@ end
 event.register(tes3.event.loaded, function()
     spawnTimer = timer.start({ iterations = -1, duration = 1.0, callback = spawnSkeleton })
     spawnTimer:pause()
-    -- Fix skeletons that were in the middle of animation when save/reload.
-    for _, cell in pairs(tes3.getActiveCells()) do
-        for ref in cell:iterateReferences(tes3.objectType.creature) do
-            if SKELETON_OBJECTS[ref.baseObject] and not ref.isDead then
-                if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
-                    tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
-                    tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
-                    skeletons[ref] = true
+    do
+        -- Fix skeletons that were in the middle of animation when save/reload.
+        for _, cell in pairs(tes3.getActiveCells()) do
+            for ref in cell:iterateReferences(tes3.objectType.creature) do
+                if isSkeleton(ref) and not ref.isDead then
+                    if tes3.getAnimationGroups({ reference = ref }) == tes3.animationGroup.idle9 then
+                        tes3.playAnimation({ reference = ref, group = tes3.animationGroup.idle })
+                        tes3.removeEffects({ reference = ref, effect = tes3.effect.paralyze })
+                        this.skeletons[ref] = true
+                    end
                 end
             end
         end
@@ -230,15 +224,15 @@ local function onReferenceCreated(e)
     end
 
     if SKELETON_SPAWNERS[object] then
-        spawners[e.reference] = true
+        this.spawners[e.reference] = true
         return
     end
 
     if SKELETON_OBJECTS[object] then
         if e.reference.isDead then
-            corpses[e.reference] = true
+            this.corpses[e.reference] = true
         else
-            skeletons[e.reference] = true
+            this.skeletons[e.reference] = true
         end
         return
     end
@@ -249,9 +243,9 @@ event.register(tes3.event.referenceActivated, onReferenceCreated)
 
 ---@param e referenceDeactivatedEventData|objectInvalidatedEventData
 local function onReferenceDeleted(e)
-    spawners[e.reference or e.object] = nil
-    skeletons[e.reference or e.object] = nil
-    corpses[e.reference or e.object] = nil
+    this.spawners[e.reference or e.object] = nil
+    this.skeletons[e.reference or e.object] = nil
+    this.corpses[e.reference or e.object] = nil
 end
 event.register(tes3.event.referenceDeactivated, onReferenceDeleted)
 event.register(tes3.event.objectInvalidated, onReferenceDeleted)
@@ -261,8 +255,10 @@ event.register(tes3.event.objectInvalidated, onReferenceDeleted)
 local function onDeath(e)
     local object = e.reference.baseObject
     if SKELETON_OBJECTS[object] then
-        skeletons[e.reference] = nil
-        corpses[e.reference] = true
+        this.skeletons[e.reference] = nil
+        this.corpses[e.reference] = true
     end
 end
 event.register(tes3.event.death, onDeath)
+
+return this
