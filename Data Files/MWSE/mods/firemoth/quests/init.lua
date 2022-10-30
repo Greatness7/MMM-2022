@@ -72,8 +72,10 @@ event.register("firemoth:travelAccepted", function()
     diversion.start()
 end)
 
-event.register("firemoth:companionsRecalled", function()
+event.register("firemoth:backdoorEntered", function()
+    quest.npcs.hjrondir:disable()
     quest.npcs.hjrondirUndead:enable()
+    quest.npcs.hjrondirUndead.fm_skeletonsIgnore = true
 end)
 
 -- Override behavior of various Firemoth doors.

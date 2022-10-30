@@ -70,7 +70,10 @@ local function attackClosestHuman(skeleton)
 
     local humans = {}
     for _, actor in pairs(nearbyActors) do
-        if not actor.isDead and not isSkeleton(actor.reference) then
+        if not actor.isDead
+            and not isSkeleton(actor.reference)
+            and not actor.reference.data.fm_skeletonsIgnore
+        then
             humans[actor.reference] = true
         end
     end

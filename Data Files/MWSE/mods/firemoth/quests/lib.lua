@@ -9,6 +9,7 @@ local quest = assert(tes3.dataHandler.nonDynamicData:findDialogue("fm_2022"))
 local events = {
     [200] = "firemoth:questAccepted",
     [300] = "firemoth:travelAccepted",
+    [400] = "firemoth:backdoorEntered",
     [450] = "firemoth:companionsRecalled",
 }
 
