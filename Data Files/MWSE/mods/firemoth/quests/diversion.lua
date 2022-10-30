@@ -4,7 +4,6 @@ local skeletonSpawner = require("firemoth.quests.skeletonSpawner")
 local pathingController = require("firemoth.quests.pathingController")
 
 local FIGHTING_POSITION = { -56195.49, -75071.70, 93.58 }
-local FIGHTING_POSITION_VEC = tes3vector3.new(unpack(FIGHTING_POSITION))
 
 local states = {
     arrived = 0,

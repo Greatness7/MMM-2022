@@ -72,7 +72,9 @@ event.register("firemoth:travelAccepted", function()
     diversion.start()
 end)
 
-
+event.register("firemoth:companionsRecalled", function()
+    quest.npcs.hjrondirUndead:enable()
+end)
 
 -- Override behavior of various Firemoth doors.
 event.register(tes3.event.activate, function(e)
@@ -86,20 +88,23 @@ event.register(tes3.event.activate, function(e)
 
     local destination = e.target.destination
     local cell = destination and destination.cell
-    if not (cell and cell.id:startswith("Firemoth")) then
+    if not cell then
         return
     end
 
-    if cell.id == "Firemoth, Upper Mines" then
+    local id = cell.id
+    if not id:startswith("Firemoth") then
+        return
+    end
+    if id == "Firemoth, Upper Mines" then
         quest.setBackdoorEntered()
         return
     end
 
-    tes3.messageBox("Unusual magic seals this door. You'll have to find another way in.")
+    tes3.messageBox("Powerful sorcery seals this door. You'll have to find another way in.")
 
     return false
 end)
-
 
 -- Disable traveling until all NPCs are recruited.
 event.register(tes3.event.activate, function(e)
@@ -123,7 +128,6 @@ event.register(tes3.event.activate, function(e)
         end
     end
 end)
-
 
 -- Handle compaion recall scroll quest item.
 event.register(tes3.event.equip, function(e)
