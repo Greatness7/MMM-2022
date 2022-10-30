@@ -105,9 +105,7 @@ end
 
 local function recallCompanions(e)
     for _, ref in pairs({ this.npcs.mara, this.npcs.aronil }) do
-        debug.log(ref)
         if ref.cell ~= tes3.player.cell then
-            mwse.log("positionCell: %s", ref)
             tes3.positionCell({
                 reference = ref,
                 position = tes3.player.position,
@@ -116,10 +114,8 @@ local function recallCompanions(e)
             })
             return
         end
-        if tes3.getCurrentAIPackageId({ reference = ref }) ~= tes3.aiPackage.follow then
-            mwse.log("setAIFollow: %s", ref)
-            ref:disable()
-            ref:enable()
+        if ref.mobile.aiPlanner:getActivePackage() == nil then
+            tes3.messageBox("setAIFollow({ reference=%s, target=%s)", ref, tes3.player)
             tes3.setAIFollow({ reference = ref, target = tes3.player })
             return
         end
