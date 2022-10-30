@@ -115,9 +115,13 @@ local function recallCompanions(e)
     for ref in this.companionReferences() do
         if ref.cell ~= tes3.player.cell then
             tes3.positionCell({ reference = ref, position = tes3.player.position, cell = tes3.player.cell })
-            tes3.setAIFollow({ reference = ref, target = tes3.player })
             return
         end
+        if ref.disabled then
+            ref:enable()
+            return
+        end
+        tes3.setAIFollow({ reference = ref, target = tes3.player })
     end
 
     tes3.removeItem({ reference = tes3.player, item = "fm_sc_recall" })

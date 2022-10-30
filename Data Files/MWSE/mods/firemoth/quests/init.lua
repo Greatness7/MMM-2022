@@ -72,8 +72,11 @@ event.register("firemoth:travelAccepted", function()
     diversion.start()
 end)
 
-event.register("firemoth:companionsRecalled", function()
+event.register("firemoth:backdoorEntered", function()
+    quest.npcs.mara:disable()
+    quest.npcs.aronil:disable()
     quest.npcs.hjrondir:disable()
+
     quest.npcs.hjrondirUndead:enable()
     quest.npcs.hjrondirUndead.data.fm_skeletonsIgnore = true
 end)
