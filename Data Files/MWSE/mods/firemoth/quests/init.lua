@@ -72,10 +72,10 @@ event.register("firemoth:travelAccepted", function()
     diversion.start()
 end)
 
-event.register("firemoth:backdoorEntered", function()
+event.register("firemoth:companionsRecalled", function()
     quest.npcs.hjrondir:disable()
     quest.npcs.hjrondirUndead:enable()
-    quest.npcs.hjrondirUndead.fm_skeletonsIgnore = true
+    quest.npcs.hjrondirUndead.data.fm_skeletonsIgnore = true
 end)
 
 -- Override behavior of various Firemoth doors.
@@ -148,6 +148,7 @@ event.register(tes3.event.equip, function(e)
 
     if not quest.companionsRecalled() then
         quest.setCompanionsRecalled()
+
         tes3ui.leaveMenuMode()
 
         tes3.playSound({

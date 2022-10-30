@@ -119,7 +119,9 @@ local function recallCompanions(e)
             return
         end
     end
+
     tes3.removeItem({ reference = tes3.player, item = "fm_sc_recall" })
+
     e.timer:cancel()
 end
 timer.register("firemoth:recallCompanions", recallCompanions)
