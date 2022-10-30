@@ -106,23 +106,12 @@ end
 local function recallCompanions(e)
     for _, ref in pairs({ this.npcs.mara, this.npcs.aronil }) do
         if ref.cell ~= tes3.player.cell then
-            tes3.positionCell({
-                reference = ref,
-                position = tes3.player.position,
-                cell = tes3.player.cell,
-                forceCellChange = true,
-            })
-            return
-        end
-        if ref.mobile.aiPlanner:getActivePackage() == nil then
-            tes3.messageBox("setAIFollow({ reference=%s, target=%s)", ref, tes3.player)
+            tes3.positionCell({ reference = ref, position = tes3.player.position, cell = tes3.player.cell })
             tes3.setAIFollow({ reference = ref, target = tes3.player })
             return
         end
     end
-
     tes3.removeItem({ reference = tes3.player, item = "fm_sc_recall" })
-
     e.timer:cancel()
 end
 timer.register("firemoth:recallCompanions", recallCompanions)
