@@ -4,11 +4,11 @@ local MIN_DISTANCE = 8192 * 1.5
 local MAX_DISTANCE = 8192 * 3.5
 
 local shader = assert(mge.shaders.load({ name = "fm_tonemap" }))
-shader.fogColor = tes3vector3.new(0.5, 0.0, 0.35)
+shader.fogColor = tes3vector3.new(0.5, 0.0, 0.2)
 shader.enabled = false
 
-local exposure = -0.050
-local saturation = -0.100
+local exposure = 0.0
+local saturation = -0.050
 local defog = 0.1
 
 local function toggleShader(enabled)
