@@ -8,7 +8,7 @@ local DOWN = tes3vector3.new(0, 0, -1)
 local XY = tes3vector3.new(1, 1, 0)
 
 local STRIKE_DAMAGE = 20
-local STRIKE_MAX_RANGE = 8192 * 0.6 -- test values for easier visibility
+local STRIKE_MAX_RANGE = 8192 * 1.0
 
 ---@type mwseTimer
 local STRIKE_TIMER
@@ -82,12 +82,12 @@ local function update()
     --- Ticks 4 times per second.
     --- Forces at least one strike per 4.35 seconds.
     --- Strikes must be at least 2.35 seconds apart.
-    --- Each tick has 5% chance of making a strikes.
+    --- Each tick has n% chance of making a strikes.
     local dt = os.clock() - lastStrikeTime
     if dt < 4.35 then
         if dt <= 2.35 then -- last strike too recent
             return
-        elseif math.random() > 0.05 then -- rng skip
+        elseif math.random() > (25 / 100) then
             return
         end
     end

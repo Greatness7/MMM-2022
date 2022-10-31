@@ -141,7 +141,7 @@ function this.createLightningExplosion(position)
     -- spawn multiple vfx objects
     for _ = 1, math.random(3, 12) do
         local direction = utils.math.getRandomRotation(70, 70, 360) * UP
-        local scale = math.random() + 2
+        local scale = (math.random() + 1.0) * 0.75 -- random(0.75, 1.5)
         this.createExplosionVFX(position, direction, scale, UP)
     end
 end
