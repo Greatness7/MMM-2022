@@ -1,5 +1,6 @@
-local lightning = require("firemoth.weather.lightning")
 local utils = require("firemoth.utils")
+local quest = require("firemoth.quests.lib")
+local lightning = require("firemoth.weather.lightning")
 
 local MAX_DISTANCE = 8192 * 3
 
@@ -15,6 +16,10 @@ local STRIKE_TIMER
 ---@param strikePos tes3vector3
 ---@return number
 local function nearestAntiMarkerDistance(strikePos)
+    if not quest.diversionStarted() then
+        return math.fhuge
+    end
+
     local closestMarkerDistance = math.huge
 
     for _, cell in ipairs(tes3.getActiveCells()) do
@@ -92,7 +97,6 @@ local function update()
     local strikeAoE = isWaterStrike and 3072 or 1024
 
     -- discourage strikes near anti-strike markers
-    -- TODO: only do this during appropriate quest
     if nearestAntiMarkerDistance(strikePos) <= 512 then
         return
     end

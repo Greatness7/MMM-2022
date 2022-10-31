@@ -83,6 +83,10 @@ function this.travelFinished()
     return quest.journalIndex >= 300
 end
 
+function this.diversionStarted()
+    return quest.journalIndex >= 350
+end
+
 function this.backdoorEntered()
     return quest.journalIndex >= 400
 end
@@ -95,7 +99,7 @@ function this.undeadHjrondir()
     return quest.journalIndex >= 475
 end
 
-function this.setFightingStarted()
+function this.setDiversionStarted()
     tes3.updateJournal({ id = quest.id, index = 350, showMessage = true })
 end
 

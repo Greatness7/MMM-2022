@@ -77,7 +77,7 @@ local function spawningHandler(data)
     if data.secondsPassed < 3.0 then
         return
     end
-    quest.setFightingStarted()
+    quest.setDiversionStarted()
 
     tes3.player.data.fm_skeletonSpawnerPosition = FIGHTING_POSITION
     tes3.player.data.fm_skeletonSpawnerDisabled = false
