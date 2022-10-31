@@ -15,6 +15,16 @@ local VFX_STRIKE_DURATION = 0.15
 local UP = tes3vector3.new(0, 0, 1)
 local SIMULATION_TIME = require("ffi").cast("float*", 0x7C6708)
 
+local THUNDER_SOUNDS = {}
+local DISTANT_THUNDER_SOUNDS = {}
+for i = 1, 6 do
+    table.insert(THUNDER_SOUNDS, tes3.getSound("tew_fm_thunder" .. i))
+    table.insert(DISTANT_THUNDER_SOUNDS, tes3.getSound("tew_fm_thunderdist" .. i))
+end
+
+local randomThunderSound = utils.math.nonRepeatTableRNG(THUNDER_SOUNDS)
+local randomDistantThunderSound = utils.math.nonRepeatTableRNG(DISTANT_THUNDER_SOUNDS)
+
 local function toggleThunderSounds(enabled)
     mwse.memory.writeByte({ address = 0x44CC99, byte = enabled and 0x84 or 0x85 }) ---@diagnostic disable-line
 end
@@ -92,19 +102,22 @@ function this.createLightningSound(position)
     local clip = 8192 * 2
     local dist = tes3.getPlayerEyePosition():distance(position)
     local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0.3)
-    local distant = ""
 
     if volume < 0.5 then
-        distant = "dist"
-        volume = volume + 0.3
+        tes3.playSound({
+            sound = randomDistantThunderSound(),
+            reference = tes3.player,
+            volume = volume + 0.3,
+            mixChannel = tes3.soundMix.master,
+        })
+    else
+        tes3.playSound({
+            sound = randomThunderSound(),
+            reference = tes3.player,
+            volume = volume + 0.3,
+            mixChannel = tes3.soundMix.master,
+        })
     end
-
-    tes3.playSound({
-        sound = "tew_fm_thunder" .. distant .. math.random(1, 6),
-        reference = tes3.player,
-        volume = volume,
-        mixChannel = tes3.soundMix.master,
-    })
 end
 
 ---@param position tes3vector3
