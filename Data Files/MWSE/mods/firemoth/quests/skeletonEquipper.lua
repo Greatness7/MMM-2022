@@ -46,10 +46,12 @@ local function attachSkinned(sceneNode, partNode)
         local skin = node.skinInstance
         if skin then
             skin.root = sceneNode:getObjectByName(skin.root.name)
+            if skin.root then
+                skin.root:attachChild(node)
+            end
             for i, bone in ipairs(skin.bones) do
                 skin.bones[i] = sceneNode:getObjectByName(bone.name)
             end
-            skin.root:attachChild(node)
         end
     end
 end
