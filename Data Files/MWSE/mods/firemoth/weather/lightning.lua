@@ -33,14 +33,16 @@ function this.createLightningFlash()
 end
 
 ---@param position tes3vector3
-function this.createExplosionVFX(position)
-    local direction = utils.math.getRandomRotation(70, 70, 360) * UP
-
+---@param direction tes3vector3
+---@param scale number
+---@param curveDir tes3vector3
+function this.createExplosionVFX(position, direction, scale, curveDir)
     local rayhit = tes3.rayTest({
         position = position,
         direction = direction,
         maxDistance = 1024,
         root = tes3.game.worldObjectRoot,
+        ignore = { tes3.player },
     })
 
     local distance = rayhit and rayhit.distance
@@ -54,7 +56,7 @@ function this.createExplosionVFX(position)
 
     -- center point of the lightning, bias this upwards so we curve
     local curveCenter = position + direction * (distance / 3)
-    local curveUpward = curveCenter + UP * (distance / 6)
+    local curveUpward = curveCenter + curveDir * (distance / 6)
 
     local vfx = tes3.createVisualEffect({
         object = VFX_EXPLODE,
@@ -62,7 +64,7 @@ function this.createExplosionVFX(position)
         position = position,
     })
     local sceneNode = vfx.effectNode
-    sceneNode.scale = math.random() + 2
+    sceneNode.scale = scale
 
     -- controls the lightning strikes "grow" animation
     local anim = sceneNode:getObjectByName("Animation")
@@ -91,7 +93,7 @@ function this.createLightningSound(position)
     local dist = tes3.getPlayerEyePosition():distance(position)
     local volume = math.remap(math.min(dist, clip), 0, clip, 0.8, 0.3)
     local distant = ""
- 
+
     if volume < 0.5 then
         distant = "dist"
         volume = volume + 0.3
@@ -125,7 +127,9 @@ function this.createLightningExplosion(position)
 
     -- spawn multiple vfx objects
     for _ = 1, math.random(3, 12) do
-        this.createExplosionVFX(position)
+        local direction = utils.math.getRandomRotation(70, 70, 360) * UP
+        local scale = math.random() + 2
+        this.createExplosionVFX(position, direction, scale, UP)
     end
 end
 
