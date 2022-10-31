@@ -12,12 +12,12 @@ event.register("initialized", function()
     if tes3.isModActive("firemoth.esm") then
         require("firemoth.quests")
         require("firemoth.shaders.tonemap")
+        require("firemoth.shaders.fogExterior")
+        require("firemoth.shaders.fogInterior")
 
         require("firemoth.weather.camera")
         require("firemoth.weather.lightningController")
-        require("firemoth.weather.fogController")
         require("firemoth.weather.fogDensityController")
-        require("firemoth.weather.fogInteriorController")
 
         require("firemoth.music.controller")
         require("firemoth.sounds.controller")

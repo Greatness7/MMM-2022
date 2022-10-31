@@ -11,7 +11,8 @@ this.FIREMOTH_REGION_ORIGIN = tes3vector3.new(
 )
 
 function this.isFiremothInterior(cell)
-    return (cell.name or ""):startswith("Firemoth") or false
+    local name = cell.name or ""
+    return name:startswith("Firemoth") or (name == "Indarys Ancestral Tomb")
 end
 
 function this.isFiremothExterior(cell)

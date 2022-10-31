@@ -1,4 +1,4 @@
-local fog = require("firemoth.weather.fog")
+local fog = require("firemoth.shaders.fog")
 local utils = require("firemoth.utils")
 
 local MIN_DISTANCE = 8192 * 1.5
