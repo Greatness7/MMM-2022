@@ -111,8 +111,8 @@ function this.deleteFog(id)
             density = 0,
         })
         applyShaderParams()
-        fogVolumes[id] = nil
-        if not next(fogVolumes) then
+        activeFogVolumes[id] = nil
+        if not next(activeFogVolumes) then
             shader.enabled = false
         end
     end
