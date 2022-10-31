@@ -44,14 +44,13 @@ end
 local function attachSkinned(sceneNode, partNode)
     for node in table.traverse(partNode.children) do
         local skin = node.skinInstance
-        if skin then
-            skin.root = sceneNode:getObjectByName(skin.root.name)
-            if skin.root then
-                skin.root:attachChild(node)
-            end
+        local root = skin and skin.root
+        if root then
+            skin.root = assert(sceneNode:getObjectByName(root.name))
             for i, bone in ipairs(skin.bones) do
-                skin.bones[i] = sceneNode:getObjectByName(bone.name)
+                skin.bones[i] = assert(sceneNode:getObjectByName(bone.name))
             end
+            skin.root:attachChild(node)
         end
     end
 end
