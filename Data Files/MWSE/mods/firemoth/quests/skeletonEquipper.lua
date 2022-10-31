@@ -34,7 +34,7 @@ local skinned = { "Groin", "Chest" }
 local function attachRegular(sceneNode, partNode, partIndex)
     local config = partConfigs[partIndex]
     if config then
-        sceneNode:getObjectByName(config.name):attachChild(partNode)
+        assert(sceneNode:getObjectByName(config.name)):attachChild(partNode)
         if config.translation then
             partNode.translation = partNode.translation + config.translation
         end
@@ -93,7 +93,7 @@ event.register(tes3.event.referenceSceneNodeCreated, function(e)
         -- Show random regular equipment.
         for _, name in pairs(regular) do
             if math.random() > 0.5 then
-                local node = bip01:getObjectByName(name)
+                local node = assert(bip01:getObjectByName(name))
                 node.appCulled = true
                 node:update()
             end
@@ -102,7 +102,7 @@ event.register(tes3.event.referenceSceneNodeCreated, function(e)
         for _, name in pairs(skinned) do
             if math.random() > 0.5 then
                 for _, child in pairs(bip01.children) do
-                    if child.name:gsub("Tri ", ""):startswith(name) then
+                    if child and child.name:gsub("Tri ", ""):startswith(name) then
                         child.appCulled = true
                         child:update()
                     end
