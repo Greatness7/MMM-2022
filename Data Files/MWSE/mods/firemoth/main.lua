@@ -9,8 +9,9 @@ if tes3.getFileExists("MWSE\\mods\\hrnchamd\\weatheradjust\\main.lua") then
 end
 
 event.register("initialized", function()
-    if tes3.isModActive("firemoth.esm") then
+    if tes3.isModActive("FiremothReclaimed.esp") then
         require("firemoth.quests")
+
         require("firemoth.shaders.tonemap")
         require("firemoth.shaders.fogExterior")
         require("firemoth.shaders.fogInterior")
@@ -21,9 +22,7 @@ event.register("initialized", function()
 
         require("firemoth.music.controller")
         require("firemoth.sounds.controller")
-    end
-end)
 
-event.register("modConfigReady", function()
-    dofile("Data Files\\MWSE\\mods\\firemoth\\mcm\\menu.lua")
+        dofile("Data Files\\MWSE\\mods\\firemoth\\mcm\\menu.lua")
+    end
 end)
