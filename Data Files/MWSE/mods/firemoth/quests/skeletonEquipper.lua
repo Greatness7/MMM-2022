@@ -46,11 +46,13 @@ local function attachSkinned(sceneNode, partNode)
         local skin = node.skinInstance
         local root = skin and skin.root
         if root then
-            skin.root = assert(sceneNode:getObjectByName(root.name))
-            for i, bone in ipairs(skin.bones) do
-                skin.bones[i] = assert(sceneNode:getObjectByName(bone.name))
-            end
-            skin.root:attachChild(node)
+            pcall(function()
+                skin.root = assert(sceneNode:getObjectByName(root.name))
+                for i, bone in ipairs(skin.bones) do
+                    skin.bones[i] = assert(sceneNode:getObjectByName(bone.name))
+                end
+                skin.root:attachChild(node)
+            end)
         end
     end
 end
