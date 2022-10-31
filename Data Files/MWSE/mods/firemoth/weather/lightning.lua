@@ -105,14 +105,14 @@ function this.createLightningSound(position)
 
     if volume < 0.5 then
         tes3.playSound({
-            sound = debug.log(randomDistantThunderSound()),
+            sound = randomDistantThunderSound(),
             reference = tes3.player,
             volume = volume + 0.3,
             mixChannel = tes3.soundMix.master,
         })
     else
         tes3.playSound({
-            sound = debug.log(randomThunderSound()),
+            sound = randomThunderSound(),
             reference = tes3.player,
             volume = volume + 0.3,
             mixChannel = tes3.soundMix.master,
