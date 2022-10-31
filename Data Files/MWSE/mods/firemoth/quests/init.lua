@@ -94,7 +94,7 @@ event.register(tes3.event.activate, function(e)
 
     local destination = e.target.destination
     local cell = destination and destination.cell
-    if not cell then
+    if not (cell and cell.isInterior) then
         return
     end
 
@@ -103,14 +103,17 @@ event.register(tes3.event.activate, function(e)
         return
     end
     if id == "Firemoth, Upper Mines" then
-        quest.setBackdoorEntered()
-        pcall(function() quest.npcs.silmdar.mobile.health.current = 0 end)
+        if quest.diversionStarted() then
+            quest.setBackdoorEntered()
+            pcall(function() quest.npcs.silmdar.mobile.health.current = 0 end)
+        end
         return
     end
 
-    tes3.messageBox("Powerful sorcery seals this door. You'll have to find another way in.")
-
-    return false
+    if not tes3.player.object.inventory:contains("fm_keep_key") then
+        tes3.playSound({ sound = "LockedDoor" })
+        return false
+    end
 end)
 
 -- Disable traveling until all NPCs are recruited.
@@ -178,11 +181,4 @@ event.register(tes3.event.equip, function(e)
     end
 
     return false
-end)
-
-event.register(tes3.event.death, function(e)
-    ---@cast e deathEventData
-    if e.reference == quest.npcs.grurn then
-        quest.setGrurnDefeated()
-    end
 end)

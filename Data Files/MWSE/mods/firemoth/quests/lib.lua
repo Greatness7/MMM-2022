@@ -38,7 +38,6 @@ local function onLoaded()
     this.npcs.hjrondir = assert(tes3.getReference("fm_hjrondir"))
     this.npcs.silmdar = assert(tes3.getReference("fm_silmdar"))
     this.npcs.hjrondirUndead = assert(tes3.getReference("fm_hjrondir_undead"))
-    this.npcs.grurn = assert(tes3.getReference("fm_grurn"))
 
     this.clutter.seydaBoat = assert(tes3.getReference("fm_seyda_boat"))
     this.clutter.mudcrabDead = assert(tes3.getReference("fm_mudcrab_dead"))
