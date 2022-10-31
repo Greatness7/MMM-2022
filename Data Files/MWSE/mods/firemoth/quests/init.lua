@@ -1,6 +1,7 @@
 local quest = require("firemoth.quests.lib")
 local diversion = require("firemoth.quests.diversion")
 local skeletonSpawner = require("firemoth.quests.skeletonSpawner")
+local skeletonEquipper = dofile("firemoth.quests.skeletonEquipper")
 
 --[[
     Journal Events
