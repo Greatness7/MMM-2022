@@ -104,6 +104,7 @@ event.register(tes3.event.activate, function(e)
     end
     if id == "Firemoth, Upper Mines" then
         quest.setBackdoorEntered()
+        pcall(function() quest.npcs.silmdar.mobile.health.current = 0 end)
         return
     end
 
