@@ -42,7 +42,7 @@
 
 #### Defeat
 
-> You've done better than I was expecting. Well done, now let's head back to Sellus Gravius.
+> You've done better than I was expecting, well done. Best head back to Sellus Gravius, we'll clean up here.
 
 ### Hjrondir
 
@@ -106,7 +106,7 @@
 
 #### Defeat
 
-> It's over. It's finally over. I can't thank you enough, come on let's report back.
+> It's over. It's finally over. I can't thank you enough, can you report back? We have some things to take care of here.
 
 #### last time
 
@@ -140,6 +140,6 @@
 |350|An ambush of skeletons arose from the ground. We should make our way to the fort as quickly as possible.|
 |400|I've found Fort Firemoth secret entrance. I should recall my companions before proceeding.|
 |450|With companions recalled inside Fort Firemoth, we should find and eliminate the lich Grurn.|
-|475|We found the corpse of Hjrondir inside the Fort Firemoth walls.|
+|475|I found and put to rest the reanimated corpse of Hjrondir inside the Fort Firemoth walls.|
 |500|I killed Grurn, put an end to the raging storm, and found the Ward of Akavir. I should report back to Sellus Gravius.|
 |600|I have reported to Sellus Gravius and he's allowed me to keep the Ward of Akavir for my good deeds.|
