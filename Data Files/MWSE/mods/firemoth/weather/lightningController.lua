@@ -3,12 +3,10 @@ local quest = require("firemoth.quests.lib")
 local lightning = require("firemoth.weather.lightning")
 
 local MAX_DISTANCE = 8192 * 3
+local STRIKE_MAX_RANGE = 8192 * 1.0
 
 local DOWN = tes3vector3.new(0, 0, -1)
 local XY = tes3vector3.new(1, 1, 0)
-
-local STRIKE_DAMAGE = 20
-local STRIKE_MAX_RANGE = 8192 * 1.0
 
 ---@type mwseTimer
 local STRIKE_TIMER
@@ -58,7 +56,7 @@ end
 ---@param position tes3vector3|nil
 local function applyDamage(target, position)
     target.mobile:applyDamage({
-        damage = STRIKE_DAMAGE,
+        damage = math.max(target.mobile.health.base / 3, 30),
         resistAttribute = tes3.effectAttribute.resistShock,
     })
     tes3.createVisualEffect({
@@ -94,7 +92,7 @@ local function update()
     lastStrikeTime = os.clock()
 
     local strikePos, isWaterStrike = getStrikePos()
-    local strikeAoE = isWaterStrike and 3072 or 1024
+    local strikeAoE = 2500 * (isWaterStrike and 2 or 1)
 
     -- discourage strikes near anti-strike markers
     if nearestAntiMarkerDistance(strikePos) <= 512 then
@@ -119,8 +117,9 @@ local function update()
     end
 
     --- TODO: move strength calculating into `createLightningStrike`
-    local shakeStrength = math.remap(math.min(strikeDist, MAX_DISTANCE), 0, MAX_DISTANCE, 0.3, 0)
-    lightning.createLightningStrike(strikePos, shakeStrength)
+    local strength = math.min(strikeDist, MAX_DISTANCE)
+    strength = math.remap(strength, 0, MAX_DISTANCE, 0.4, 0)
+    lightning.createLightningStrike(strikePos, strength)
 
     -- tes3.messageBox("distance: %.2f | shake: %.2f", strikeDist, shakeStrength)
 end
