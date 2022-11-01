@@ -46,6 +46,11 @@ local function onLoaded()
     if quest.journalIndex < 200 then
         this.setPersistentReferencesDisabled(true)
     end
+
+    local ref = tes3.getReference("fm_grurn")
+    if ref then
+        ref.data.fm_skeletonsIgnore = true
+    end
 end
 event.register(tes3.event.loaded, onLoaded, { priority = 7000 })
 
