@@ -20,7 +20,9 @@ end)
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
     local cell = tes3.getPlayerCell()
-    if isFiremothCell(cell) then
+    local isFiremoth = isFiremothCell(cell)
+    local wasFiremoth = previousCell and isFiremothCell(previousCell)
+    if isFiremoth and not wasFiremoth then
         e.music = table.choice(whitelistedTracks)
         e.situation = config.musicSituation
         return false
@@ -34,6 +36,7 @@ local function onCombatStopped()
     if isFiremoth then
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
     end
+    previousCell = cell
 end
 
 local function firemothConditionCheck()
