@@ -4,6 +4,8 @@ local SILENCE = "fm\\Special\\silence.mp3"
 local config = require("firemoth.mcm.config")
 local previousCell
 local waterVolume = 0.4
+local GRURN_ID = "fm_grurn"
+local grurnPlayed = false
 
 --- @type function
 local isFiremothCell = utils.cells.isFiremothCell
@@ -17,6 +19,22 @@ event.register("loaded", function()
     waterLayer.prevVolume = waterLayer.sound.volume
 end)
 
+local function onCombatStart(e)
+    local cell = tes3.getPlayerCell()
+    local isFiremoth = isFiremothCell(cell)
+    if not isFiremoth then return end
+
+    if grurnPlayed == true then return end
+
+    local target = e.target.reference.id
+    local actor = e.actor.reference.id
+    if string.startswith(target, GRURN_ID)
+    or string.startswith(actor, GRURN_ID) then
+        tes3.streamMusic{path = "fm\\Battle\\tew_cc_grurn_battle.mp3", situation = tes3.musicSituation.battle}
+        grurnPlayed = true
+    end
+end
+
 --- @param e musicSelectTrackEventData
 local function prioritiseFiremothMusic(e)
     local cell = tes3.getPlayerCell()
@@ -25,6 +43,8 @@ local function prioritiseFiremothMusic(e)
     if isFiremoth and not wasFiremoth then
         e.music = table.choice(whitelistedTracks)
         e.situation = config.musicSituation
+        previousCell = cell
+        grurnPlayed = false
         return false
     end
 end
@@ -35,8 +55,9 @@ local function onCombatStopped()
     local isFiremoth = isFiremothCell(cell)
     if isFiremoth then
         tes3.streamMusic{path = table.choice(whitelistedTracks), situation = config.musicSituation}
+        grurnPlayed = false
+        previousCell = cell
     end
-    previousCell = cell
 end
 
 local function firemothConditionCheck()
@@ -51,6 +72,7 @@ local function firemothConditionCheck()
         waterLayer.sound.volume = waterLayer.prevVolume
         tes3.streamMusic{path = SILENCE, situation = tes3.musicSituation.explore}
     end
+    grurnPlayed = false
     previousCell = cell
 end
 
@@ -71,6 +93,7 @@ populateTracks()
 event.register(tes3.event.musicSelectTrack, prioritiseFiremothMusic, { priority = 360 })
 event.register(tes3.event.cellChanged, firemothConditionCheck)
 event.register(tes3.event.load, resetOnLoad)
+event.register(tes3.event.combatStart, onCombatStart)
 
 -- For some reason a config check inside the event didn't work, and we don't want to claim the event
 -- This requires restart after toggling in MCM, but oh well
