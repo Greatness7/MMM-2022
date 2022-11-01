@@ -114,7 +114,7 @@ function this.createLightningSound(position)
         tes3.playSound({
             sound = randomThunderSound(),
             reference = tes3.player,
-            volume = volume + 0.3,
+            volume = volume,
             mixChannel = tes3.soundMix.master,
         })
     end
