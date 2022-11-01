@@ -56,7 +56,7 @@ end
 ---@param position tes3vector3|nil
 local function applyDamage(target, position)
     target.mobile:applyDamage({
-        damage = math.max(target.mobile.health.base / 3, 30),
+        damage = math.max(target.mobile.health.base / 4, 25),
         resistAttribute = tes3.effectAttribute.resistShock,
     })
     tes3.createVisualEffect({
@@ -94,26 +94,29 @@ local function update()
     local strikePos, isWaterStrike = getStrikePos()
     local strikeAoE = 2500 * (isWaterStrike and 2 or 1)
 
-    -- discourage strikes near anti-strike markers
-    if nearestAntiMarkerDistance(strikePos) <= 512 then
-        return
-    end
-
-    -- target companions first
-    for _, companion in ipairs(utils.cells.getNearbyCompanions()) do
-        if utils.math.xyDistance(strikePos, companion.position) <= strikeAoE then
-            strikePos = companion.position
-            applyDamage(companion)
-        end
-    end
-
-    -- prefer targeting the player if they're closer
     local eyepos = tes3.getPlayerEyePosition()
     local strikeDist = utils.math.xyDistance(strikePos, eyepos)
-    if strikeDist <= strikeAoE then
-        local eyevec = tes3.getPlayerEyeVector()
-        strikePos = (eyepos + eyevec * 512) * XY
-        applyDamage(tes3.player, eyepos + eyevec * 128)
+
+    if not tes3.player.data.fm_lightningDisabled then
+        -- discourage strikes near anti-strike markers
+        if nearestAntiMarkerDistance(strikePos) <= 512 then
+            return
+        end
+
+        -- target companions first
+        for _, companion in ipairs(utils.cells.getNearbyCompanions()) do
+            if utils.math.xyDistance(strikePos, companion.position) <= strikeAoE then
+                strikePos = companion.position
+                applyDamage(companion)
+            end
+        end
+
+        -- prefer targeting the player if they're closer
+        if strikeDist <= strikeAoE then
+            local eyevec = tes3.getPlayerEyeVector()
+            strikePos = (eyepos + eyevec * 512) * XY
+            applyDamage(tes3.player, eyepos + eyevec * 128)
+        end
     end
 
     --- TODO: move strength calculating into `createLightningStrike`

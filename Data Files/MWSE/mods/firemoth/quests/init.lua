@@ -182,3 +182,12 @@ event.register(tes3.event.equip, function(e)
 
     return false
 end)
+
+---@param e deathEventData
+local function onDeath(e)
+    if e.reference.baseObject.id == "fm_grurn" then
+        tes3.player.data.fm_skeletonSpawnerDisabled = true
+        tes3.player.data.fm_lightningDisabled = true
+    end
+end
+event.register(tes3.event.death, onDeath)
