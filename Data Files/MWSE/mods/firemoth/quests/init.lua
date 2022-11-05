@@ -9,9 +9,13 @@ local skeletonEquipper = dofile("firemoth.quests.skeletonEquipper")
 
 event.register("firemoth:questAccepted", function()
     quest.setPersistentReferencesDisabled(false)
+    quest.setClutterReferencesDisabled(false)
 end)
 
 event.register("firemoth:travelAccepted", function()
+    -- Remove the boat from Seyda Neen.
+    quest.setClutterReferencesDisabled(true)
+
     -- Disable skeleton spawning until NPCs are ready.
     tes3.player.data.fm_skeletonSpawnerDisabled = true
 

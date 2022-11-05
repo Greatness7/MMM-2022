@@ -43,8 +43,14 @@ local function onLoaded()
 
     this.clutter.seydaBoat = assert(tes3.getReference("fm_seyda_boat"))
     this.clutter.mudcrabDead = assert(tes3.getReference("fm_mudcrab_dead"))
-    if quest.journalIndex < 200 then
+
+    if not this.questAccepted() then
+        this.setClutterReferencesDisabled(true)
         this.setPersistentReferencesDisabled(true)
+    end
+
+    if this.travelFinished() then
+        this.setClutterReferencesDisabled(true)
     end
 
     local ref = tes3.getReference("fm_grurn")
@@ -66,11 +72,14 @@ local function setDisabled(ref, disabled)
     end
 end
 
-function this.setPersistentReferencesDisabled(disabled)
-    for _, ref in pairs(this.npcs) do
+function this.setClutterReferencesDisabled(disabled)
+    for _, ref in pairs(this.clutter) do
         setDisabled(ref, disabled)
     end
-    for _, ref in pairs(this.clutter) do
+end
+
+function this.setPersistentReferencesDisabled(disabled)
+    for _, ref in pairs(this.npcs) do
         setDisabled(ref, disabled)
     end
 end
@@ -83,6 +92,10 @@ function this.companionReferences()
             coroutine.yield(this.npcs.hjrondir)
         end
     end)
+end
+
+function this.questAccepted()
+    return quest.journalIndex >= 200
 end
 
 function this.travelFinished()
