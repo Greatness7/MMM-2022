@@ -42,7 +42,7 @@ local function updatePosition(strength, time)
     cameraAdjuster.translation = translation
     cameraAdjuster:update()
 
-    skyAdjuster.translation = cameraAdjuster.worldTransform.translation - tes3.player.position
+    skyAdjuster.translation = translation
     skyAdjuster:update()
 
     -- TODO: probably need to fix shadow camera also?
