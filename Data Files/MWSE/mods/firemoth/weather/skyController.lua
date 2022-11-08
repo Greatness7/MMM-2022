@@ -1,3 +1,5 @@
+local previousFiremothPreset
+
 -- World controller does not exist at this point, so we need hardcoded values
 local weathers = {
     ["Clear"] = "Data Files\\Textures\\tx_sky_clear.tga",
@@ -37,6 +39,7 @@ local FIREMOTH_INSCATTER = {0.005,0.005,0.005}
 
 local function overridePreset()
     local preset = mwse.loadConfig("Weather Adjuster")
+    previousFiremothPreset = preset.regions["Firemoth Region"]
     mwse.saveConfig("Weather Adjuster_backup", preset)
     if preset then
         preset.presets["CC_Firemoth"] = {}
@@ -52,7 +55,10 @@ local function overridePreset()
 end
 
 local function restorePreset()
-    local preset = mwse.loadConfig("Weather Adjuster_backup")
+    local preset = mwse.loadConfig("Weather Adjuster")
+    if previousFiremothPreset then
+        preset.regions["Firemoth Region"] = previousFiremothPreset
+    end
     if preset then
         mwse.saveConfig("Weather Adjuster", preset)
     end
