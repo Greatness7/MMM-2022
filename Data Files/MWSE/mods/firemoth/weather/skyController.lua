@@ -38,39 +38,40 @@ local FIREMOTH_OUTSCATTER = {0.005,0.005,0.005}
 local FIREMOTH_INSCATTER = {0.005,0.005,0.005}
 
 local function overridePreset()
-    local preset = mwse.loadConfig("Weather Adjuster")
-    previousFiremothPreset = preset.regions["Firemoth Region"]
-    mwse.saveConfig("Weather Adjuster_backup", preset)
-    if preset then
-        preset.presets["CC_Firemoth"] = {}
-        for name, tex in pairs(weathers) do
-            preset.presets["CC_Firemoth"][name] = FIREMOTH_COLORS
-            preset.presets["CC_Firemoth"][name]["cloudTexture"] = tex
-        end
-        preset.presets["CC_Firemoth"].outscatter = FIREMOTH_OUTSCATTER
-        preset.presets["CC_Firemoth"].inscatter = FIREMOTH_INSCATTER
-        preset.regions["Firemoth Region"] = "CC_Firemoth"
-        mwse.saveConfig("Weather Adjuster", preset)
+    local config = mwse.loadConfig("Weather Adjuster")
+    if config == nil then
+        config = { regions = {}, presets = {} }
     end
+    previousFiremothPreset = config.regions["Firemoth Region"]
+    mwse.saveConfig("Weather Adjuster_backup", config)
+    config.presets["CC_Firemoth"] = {}
+    for name, tex in pairs(weathers) do
+        config.presets["CC_Firemoth"][name] = FIREMOTH_COLORS
+        config.presets["CC_Firemoth"][name]["cloudTexture"] = tex
+    end
+    config.presets["CC_Firemoth"].outscatter = FIREMOTH_OUTSCATTER
+    config.presets["CC_Firemoth"].inscatter = FIREMOTH_INSCATTER
+    config.regions["Firemoth Region"] = "CC_Firemoth"
+    mwse.saveConfig("Weather Adjuster", config)
 end
 
 local function restorePreset()
-    local preset = mwse.loadConfig("Weather Adjuster")
+    local config = mwse.loadConfig("Weather Adjuster")
     if previousFiremothPreset then
-        preset.regions["Firemoth Region"] = previousFiremothPreset
+        config.regions["Firemoth Region"] = previousFiremothPreset
     end
-    if preset then
-        mwse.saveConfig("Weather Adjuster", preset)
+    if config then
+        mwse.saveConfig("Weather Adjuster", config)
     end
 end
 
 local function rebindExitButton(e)
-	-- Try to find the options menu exit button.
-	local exitButton = e.element:findChild(tes3ui.registerID("MenuOptions_Exit_container"))
-	if (exitButton == nil) then return end
+    -- Try to find the options menu exit button.
+    local exitButton = e.element:findChild(tes3ui.registerID("MenuOptions_Exit_container"))
+    if (exitButton == nil) then return end
 
-	-- Set our new event handler.
-	exitButton:registerAfter("mouseClick", restorePreset)
+    -- Set our new event handler.
+    exitButton:registerAfter("mouseClick", restorePreset)
 end
 event.register("uiCreated", rebindExitButton, { filter = "MenuOptions" })
 
