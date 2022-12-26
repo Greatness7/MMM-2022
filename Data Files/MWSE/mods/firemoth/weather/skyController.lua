@@ -34,6 +34,7 @@ local FIREMOTH_COLORS = {
     ["fogNightColor"] = {0,0.17499999701977,0.15500000119209},
     ["skySunriseColor"] = {0,0.15999999642372,0.11999999731779}
 }
+
 local FIREMOTH_OUTSCATTER = {0.005,0.005,0.005}
 local FIREMOTH_INSCATTER = {0.005,0.005,0.005}
 
@@ -57,10 +58,11 @@ end
 
 local function restorePreset()
     local config = mwse.loadConfig("Weather Adjuster")
-    if previousFiremothPreset then
-        config.regions["Firemoth Region"] = previousFiremothPreset
-    end
     if config then
+        if previousFiremothPreset then
+            config.regions["Firemoth Region"] = previousFiremothPreset
+        end
+
         mwse.saveConfig("Weather Adjuster", config)
     end
 end
